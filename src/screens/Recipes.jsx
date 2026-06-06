@@ -5,7 +5,6 @@ import {
   ArrowPathIcon,
   ClockIcon,
   FireIcon,
-  HeartIcon,
 } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
 import {
@@ -64,15 +63,8 @@ function RecipeRow({ recipe, onOpen }) {
     <ListRow
       onClick={onOpen}
       className="cursor-pointer"
-      leading={<Thumbnail size="lg" />}
-      title={
-        <div className="flex items-start justify-between gap-2">
-          <Text variant="cardTitle" className="truncate">
-            {recipe.name}
-          </Text>
-          <IconButton icon={HeartIcon} label={`Favorite ${recipe.name}`} size="inlineSm" variant="ghost" />
-        </div>
-      }
+      leading={<Thumbnail size="lg" className="!h-24 !w-24 !rounded-r-none" />}
+      title={recipe.name}
       subtitle={
         <div className="mt-1 space-y-1">
           <Text variant="caption" className="block">

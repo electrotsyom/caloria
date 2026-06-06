@@ -30,10 +30,7 @@ import {
  * bottomNav slot). Food rows + suggested cards → /food-detail. Composed entirely
  * from the existing library (screen-recreation-plan.md §"Screen 1").
  *
- * Deviation from the plan: §"Special Notes" asks for Popular Foods as a vertical
- * food-row list, but the screenshot (visual source of truth) + DESIGN_INVENTORY
- * §4.5 / Phase 1 show a CHIP CLOUD. Per the conflict rule (preserve screenshot
- * structure/density), Popular Foods is implemented as a wrapping chip cloud.
+ * Popular Foods follows the plan's §"Special Notes" as a vertical food-row list.
  */
 
 const MEALS = ['Breakfast', 'Lunch', 'Dinner', 'Snacks']
@@ -45,16 +42,16 @@ const QUICK_ACTIONS = [
 ]
 
 const POPULAR_FOODS = [
-  'Eggs',
-  'Banana',
-  'Avocado',
-  'Chicken',
-  'Milk',
-  'Apple',
-  'Peanut Butter',
-  'Rice',
-  'Broccoli',
-  'Cheese',
+  { name: 'Eggs', detail: '2 large · 100g', kcal: '155' },
+  { name: 'Banana', detail: '1 medium · 118g', kcal: '105' },
+  { name: 'Avocado', detail: '½ fruit · 100g', kcal: '160' },
+  { name: 'Chicken', detail: '1 breast · 120g', kcal: '198' },
+  { name: 'Milk', detail: '1 cup · 240ml', kcal: '122' },
+  { name: 'Apple', detail: '1 medium · 182g', kcal: '95' },
+  { name: 'Peanut Butter', detail: '2 tbsp · 32g', kcal: '188' },
+  { name: 'Rice', detail: '1 cup · 158g', kcal: '205' },
+  { name: 'Broccoli', detail: '1 cup · 91g', kcal: '31' },
+  { name: 'Cheese', detail: '1 slice · 28g', kcal: '113' },
 ]
 
 const RECENTLY_LOGGED = [
@@ -141,17 +138,20 @@ export default function LogFood() {
           </ScrollRow>
         </ScreenSection>
 
-        {/* Popular Foods — chip cloud (wrapping sm pills w/ neutral food blob) */}
+        {/* Popular Foods — vertical food-row list */}
         <ScreenSection title="Popular Foods" action={<SectionLink>See all</SectionLink>}>
-          <div className="flex flex-wrap gap-2">
-            {POPULAR_FOODS.map((label) => (
-              <Pill
-                key={label}
-                size="sm"
-                leading={<span className="h-4 w-4 shrink-0 rounded-full bg-neutral-200" />}
-              >
-                {label}
-              </Pill>
+          <div className="space-y-3">
+            {POPULAR_FOODS.map((food) => (
+              <ListRow
+                key={food.name}
+                onClick={openDetail}
+                className="cursor-pointer"
+                leading={<Thumbnail size="md" className="!h-16 !w-16 !rounded-r-none" />}
+                title={food.name}
+                subtitle={food.detail}
+                trailing={<KcalValue>{food.kcal}</KcalValue>}
+                action={addAction}
+              />
             ))}
           </div>
         </ScreenSection>
