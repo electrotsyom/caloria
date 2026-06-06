@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hide the native scrollbar on horizontal scroll tracks (ScrollRow). The
+   wireframe shows clean edge-bleeding pill/carousel rows with no scrollbar
+   chrome. Cross-browser: Firefox (scrollbar-width), IE/legacy Edge
+   (-ms-overflow-style), and WebKit/Blink (::-webkit-scrollbar). */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  /* App lives inside a centered mobile frame on desktop */
+  background-color: #f1f5f9; /* slate-100 */
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
