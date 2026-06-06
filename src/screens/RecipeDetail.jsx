@@ -18,6 +18,8 @@ import {
   MobileFrame,
   Screen,
   ScreenSection,
+  ScrollRow,
+  Pill,
   Card,
   Badge,
   Button,
@@ -76,6 +78,8 @@ const INGREDIENTS = [
   { name: 'Black Pepper', note: 'Freshly ground', amount: '1 tsp', per: '½ tsp/serving' },
   { name: 'Sea Salt', note: 'To taste', amount: '1 tsp', per: '½ tsp/serving' },
 ]
+
+const MEALS = ['Breakfast', 'Lunch', 'Dinner', 'Snacks']
 
 const TABS = [
   { key: 'ingredients', label: 'Ingredients', icon: ListBulletIcon },
@@ -181,6 +185,17 @@ export default function RecipeDetail() {
             </div>
             <MacroSummary items={MACROS} />
           </Card>
+        </ScreenSection>
+
+        {/* Add to Meal — scrollable meal segments, Breakfast selected */}
+        <ScreenSection title="Add to Meal">
+          <ScrollRow bleed>
+            {MEALS.map((meal, i) => (
+              <Pill key={meal} selected={i === 0}>
+                {meal}
+              </Pill>
+            ))}
+          </ScrollRow>
         </ScreenSection>
 
         {/* Tabs + ingredient list */}
