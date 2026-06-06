@@ -11,6 +11,8 @@ import {
   ListBulletIcon,
   BookOpenIcon,
   ChartPieIcon,
+  CubeTransparentIcon,
+  BeakerIcon,
 } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { cn } from '../lib/cn'
@@ -26,13 +28,16 @@ import {
   IconButton,
   Stepper,
   MacroSummary,
+  StatCard,
   TabBar,
   TabItem,
   ListRow,
   DetailList,
+  DetailRow,
   Thumbnail,
   Text,
   Icon,
+  PlantIcon,
 } from '../components'
 
 /*
@@ -80,6 +85,22 @@ const INGREDIENTS = [
 ]
 
 const MEALS = ['Breakfast', 'Lunch', 'Dinner', 'Snacks']
+
+// Nutrition tab — mirrors Food Details' Nutrition Summary, using this
+// recipe's own macros (see MACROS / 640 kcal). The mineral rows are
+// wireframe placeholders, consistent with the rest of the screen.
+const NUTRITION_STATS = [
+  { value: '84g', label: 'Protein', icon: CubeTransparentIcon },
+  { value: '16g', label: 'Carbs', icon: PlantIcon },
+  { value: '28g', label: 'Fat', icon: BeakerIcon },
+]
+
+const NUTRITION_DETAILS = [
+  { label: 'Fiber', value: '4g' },
+  { label: 'Sodium', value: '320mg' },
+  { label: 'Cholesterol', value: '95mg' },
+  { label: 'Potassium', value: '480mg' },
+]
 
 const TABS = [
   { key: 'ingredients', label: 'Ingredients', icon: ListBulletIcon },
@@ -211,8 +232,7 @@ export default function RecipeDetail() {
             ))}
           </TabBar>
 
-          {/* Only the Ingredients panel is shown in the screenshot; the
-              Instructions / Nutrition panels are off-screen and not invented. */}
+          {/* The Instructions panel is off-screen and not invented. */}
           {activeTab === 'ingredients' && (
             <Card className="mt-2">
               <DetailList>
@@ -226,6 +246,35 @@ export default function RecipeDetail() {
                     subtitle={item.note}
                     trailing={<Amount amount={item.amount} per={item.per} />}
                   />
+                ))}
+              </DetailList>
+            </Card>
+          )}
+
+          {/* Nutrition — Nutrition Summary card mirrored from Food Details */}
+          {activeTab === 'nutrition' && (
+            <Card className="mt-2 space-y-4">
+              <div className="flex items-center justify-between">
+                <Text as="h2" variant="section">
+                  Nutrition Summary
+                </Text>
+                <Text variant="caption">per serving</Text>
+              </div>
+              <div className="flex items-center justify-between rounded-xl bg-neutral-50 p-3">
+                <span className="flex items-center gap-2">
+                  <Icon as={FireIcon} size="inline" className="text-neutral-400" />
+                  <Text variant="body">Calories</Text>
+                </span>
+                <Text variant="section">640 kcal</Text>
+              </div>
+              <div className="grid grid-cols-3 gap-3 !mt-3">
+                {NUTRITION_STATS.map((stat) => (
+                  <StatCard key={stat.label} icon={stat.icon} value={stat.value} label={stat.label} />
+                ))}
+              </div>
+              <DetailList>
+                {NUTRITION_DETAILS.map((row) => (
+                  <DetailRow key={row.label} label={row.label} value={row.value} />
                 ))}
               </DetailList>
             </Card>
