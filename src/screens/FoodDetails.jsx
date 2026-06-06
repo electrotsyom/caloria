@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
+  ChevronLeftIcon,
   HeartIcon,
   FireIcon,
   CheckBadgeIcon,
@@ -8,7 +9,6 @@ import {
 import {
   MobileFrame,
   Screen,
-  ScreenHeader,
   ScreenSection,
   ScrollRow,
   Pill,
@@ -75,6 +75,16 @@ const DETAILS = [
   { label: 'Potassium', value: '256mg' },
 ]
 
+/* A meta item over the hero scrim: small icon + white caption text. */
+function HeroMeta({ icon, children }) {
+  return (
+    <span className="flex items-center gap-1">
+      <Icon as={icon} size="small" className="text-white" />
+      {children}
+    </span>
+  )
+}
+
 /* A single macro bar: label + value over a placeholder ProgressBar (4.9). */
 function MacroBar({ label, value, fill }) {
   return (
@@ -108,24 +118,36 @@ export default function FoodDetails() {
 
   return (
     <MobileFrame bottomNav={stickyFooter}>
-      <Screen safeTop>
-        <ScreenHeader
-          title="Grilled Chicken Breast"
-          onBack={() => navigate(-1)}
-          action={<IconButton icon={HeartIcon} label="Favorite" />}
-        />
+      {/* No safeTop — the hero bleeds under the status bar; overlay controls
+          clear it via their own top inset. */}
+      <Screen>
+        {/* Full-bleed hero with overlay controls + badges + title */}
+        <div className="relative h-72 w-full overflow-hidden bg-neutral-200">
+          <div className="absolute inset-0 bg-neutral-900/40" />
 
-        {/* Hero media — full-bleed placeholder with overlaid badges */}
-        <ScreenSection bleed>
-          <div className="relative h-48 w-full overflow-hidden bg-neutral-200">
-            <Badge variant="onImage" className="absolute right-3 top-3">
-              High Protein
-            </Badge>
-            <Badge variant="onImage" leadingIcon={CheckBadgeIcon} className="absolute bottom-3 left-3">
-              Verified
-            </Badge>
+          {/* Overlay controls: back (left), heart (right) */}
+          <div className="absolute inset-x-0 top-0 flex items-center justify-between px-4 pt-[59px]">
+            <IconButton icon={ChevronLeftIcon} label="Back" variant="overlay" onClick={() => navigate(-1)} />
+            <IconButton icon={HeartIcon} label="Favorite" variant="overlay" />
           </div>
-        </ScreenSection>
+
+          {/* Bottom overlay: badges, title, meta */}
+          <div className="absolute inset-x-0 bottom-0 space-y-2 p-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="onImage">High Protein</Badge>
+              <Badge variant="onImage" leadingIcon={CheckBadgeIcon}>
+                Verified
+              </Badge>
+            </div>
+            <Text as="h1" variant="title" className="block text-white">
+              Grilled Chicken Breast
+            </Text>
+            <div className="flex flex-wrap items-center gap-3 text-xs text-white">
+              <HeroMeta icon={FireIcon}>165 kcal</HeroMeta>
+              <span>per 100g serving</span>
+            </div>
+          </div>
+        </div>
 
         {/* Calorie summary + macro bars */}
         <ScreenSection>
