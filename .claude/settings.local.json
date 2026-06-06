@@ -6,7 +6,8 @@
       "PowerShell(\"---node---\")",
       "PowerShell(\"---npm---\")",
       "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:5173/src/components/MobileFrame.jsx\" -UseBasicParsing -TimeoutSec 5; \"MobileFrame => HTTP $\\($r.StatusCode\\); 375px present: $\\($r.Content -match '375px'\\)\" } catch { \"ERROR: $\\($_.Exception.Message\\)\" })",
-      "Bash(npx vite *)"
+      "Bash(npx vite *)",
+      "PowerShell(\"--- DIFF STAT ---\")"
     ]
   }
 }

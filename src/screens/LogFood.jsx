@@ -164,7 +164,7 @@ export default function LogFood() {
                 key={food.name}
                 onClick={openDetail}
                 className="cursor-pointer"
-                leading={<Thumbnail size="md" />}
+                leading={<Thumbnail size="md" className="!h-16 !w-16 !rounded-r-none" />}
                 title={food.name}
                 subtitle={food.detail}
                 trailing={<KcalValue>{food.kcal}</KcalValue>}
