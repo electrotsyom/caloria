@@ -13,6 +13,7 @@ import {
   ChartPieIcon,
 } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
+import { cn } from '../lib/cn'
 import {
   MobileFrame,
   Screen,
@@ -109,8 +110,22 @@ export default function RecipeDetail() {
   const [servings, setServings] = useState(2)
   const [activeTab, setActiveTab] = useState('ingredients')
 
+  // Sticky Cancel / Record bar, pinned to the bottom of the frame.
+  const stickyFooter = (
+    <div className="border-t border-neutral-200 bg-white pb-[env(safe-area-inset-bottom)]">
+      <div className="flex items-center gap-3 px-4 py-3">
+        <Button variant="secondary" fullWidth={false} className="px-6" onClick={() => navigate(-1)}>
+          Cancel
+        </Button>
+        <Button variant="primary" className="flex-1" leadingIcon={PlusCircleIcon}>
+          Record
+        </Button>
+      </div>
+    </div>
+  )
+
   return (
-    <MobileFrame>
+    <MobileFrame bottomNav={stickyFooter}>
       {/* No safeTop — the hero bleeds under the status bar; overlay controls
           clear it via their own top inset. */}
       <Screen>
@@ -144,8 +159,8 @@ export default function RecipeDetail() {
           </div>
         </div>
 
-        {/* Servings + calories + macro summary, then the inline Record button */}
-        <ScreenSection className="space-y-4">
+        {/* Servings + calories + macro summary */}
+        <ScreenSection>
           <Card className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -166,10 +181,6 @@ export default function RecipeDetail() {
             </div>
             <MacroSummary items={MACROS} />
           </Card>
-
-          <Button variant="primary" leadingIcon={PlusCircleIcon}>
-            Record
-          </Button>
         </ScreenSection>
 
         {/* Tabs + ingredient list */}
@@ -188,18 +199,21 @@ export default function RecipeDetail() {
           {/* Only the Ingredients panel is shown in the screenshot; the
               Instructions / Nutrition panels are off-screen and not invented. */}
           {activeTab === 'ingredients' && (
-            <DetailList className="mt-2">
-              {INGREDIENTS.map((item) => (
-                <ListRow
-                  key={item.name}
-                  card={false}
-                  leading={<Thumbnail size="sm" tone="icon" />}
-                  title={item.name}
-                  subtitle={item.note}
-                  trailing={<Amount amount={item.amount} per={item.per} />}
-                />
-              ))}
-            </DetailList>
+            <Card className="mt-2">
+              <DetailList>
+                {INGREDIENTS.map((item, i) => (
+                  <ListRow
+                    key={item.name}
+                    card={false}
+                    className={cn(i === 0 && 'pt-0', i === INGREDIENTS.length - 1 && 'pb-0')}
+                    leading={<Thumbnail size="sm" tone="icon" />}
+                    title={item.name}
+                    subtitle={item.note}
+                    trailing={<Amount amount={item.amount} per={item.per} />}
+                  />
+                ))}
+              </DetailList>
+            </Card>
           )}
         </ScreenSection>
       </Screen>
