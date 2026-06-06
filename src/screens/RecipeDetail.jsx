@@ -9,7 +9,7 @@ import {
   ChartBarIcon,
   PlusCircleIcon,
   ListBulletIcon,
-  QueueListIcon,
+  BookOpenIcon,
   ChartPieIcon,
 } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
@@ -78,7 +78,7 @@ const INGREDIENTS = [
 
 const TABS = [
   { key: 'ingredients', label: 'Ingredients', icon: ListBulletIcon },
-  { key: 'instructions', label: 'Instructions', icon: QueueListIcon },
+  { key: 'instructions', label: 'Instructions', icon: BookOpenIcon },
   { key: 'nutrition', label: 'Nutrition', icon: ChartPieIcon },
 ]
 

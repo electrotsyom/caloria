@@ -1,5 +1,6 @@
 export { default as Text } from './Text'
 export { default as Icon } from './Icon'
+export { default as PlantIcon } from './PlantIcon'
 export { default as Card } from './Card'
 export { default as Divider } from './Divider'
 export { default as Button } from './Button'

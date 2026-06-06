@@ -12,9 +12,11 @@ import Text from '../primitives/Text'
 export default function StatCard({ icon, value, label, className }) {
   return (
     <div className={cn('flex flex-col items-center gap-1 rounded-xl bg-neutral-50 p-3 text-center', className)}>
-      {icon && <Icon as={icon} size="inline" className="text-neutral-400" />}
+      <div className="flex items-center gap-1 text-neutral-400">
+        {icon && <Icon as={icon} size="inline" />}
+        <Text variant="statLabel">{label}</Text>
+      </div>
       <Text variant="stat">{value}</Text>
-      <Text variant="caption">{label}</Text>
     </div>
   )
 }

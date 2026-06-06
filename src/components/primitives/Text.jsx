@@ -20,7 +20,8 @@ const VARIANTS = {
   caption: 'text-xs text-neutral-400', // subtitle / caption / meta
   label: 'text-xs font-medium text-neutral-500', // macro / form labels
   hero: 'text-3xl font-bold text-neutral-900', // hero kcal value
-  stat: 'text-base font-bold text-neutral-900', // stat-box value
+  stat: 'text-base font-semibold text-neutral-900', // stat-box value
+  statLabel: 'text-sm text-neutral-400', // stat-box label
 }
 
 export default function Text({

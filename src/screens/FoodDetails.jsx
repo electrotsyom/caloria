@@ -5,6 +5,8 @@ import {
   HeartIcon,
   FireIcon,
   CheckBadgeIcon,
+  CubeTransparentIcon,
+  BeakerIcon,
 } from '@heroicons/react/24/outline'
 import {
   MobileFrame,
@@ -13,7 +15,6 @@ import {
   ScrollRow,
   Pill,
   Card,
-  Thumbnail,
   Badge,
   Button,
   IconButton,
@@ -24,6 +25,7 @@ import {
   DetailList,
   Text,
   Icon,
+  PlantIcon,
 } from '../components'
 
 /*
@@ -53,18 +55,11 @@ import {
 const MEALS = ['Breakfast', 'Lunch', 'Dinner', 'Snacks']
 const SERVING_SIZES = ['100g', '1 piece', '1 oz', 'Custom']
 
-// Macro bars (top card). Fill widths are placeholders, not data (4.9).
-const MACROS = [
-  { label: 'Protein', value: '31g', fill: 78 },
-  { label: 'Carbs', value: '0g', fill: 4 },
-  { label: 'Fat', value: '3.6g', fill: 22 },
-]
-
 // Nutrition Summary stat boxes (3-up).
 const STATS = [
-  { value: '31g', label: 'Protein' },
-  { value: '0g', label: 'Carbs' },
-  { value: '3.6g', label: 'Fat' },
+  { value: '31g', label: 'Protein', icon: CubeTransparentIcon },
+  { value: '0g', label: 'Carbs', icon: PlantIcon },
+  { value: '3.6g', label: 'Fat', icon: BeakerIcon },
 ]
 
 // Nutrition Summary detail rows.
@@ -82,19 +77,6 @@ function HeroMeta({ icon, children }) {
       <Icon as={icon} size="small" className="text-white" />
       {children}
     </span>
-  )
-}
-
-/* A single macro bar: label + value over a placeholder ProgressBar (4.9). */
-function MacroBar({ label, value, fill }) {
-  return (
-    <div>
-      <div className="flex items-center justify-between">
-        <Text variant="body">{label}</Text>
-        <Text variant="cardTitle">{value}</Text>
-      </div>
-      <ProgressBar value={fill} className="mt-1" />
-    </div>
   )
 }
 
@@ -148,31 +130,6 @@ export default function FoodDetails() {
             </div>
           </div>
         </div>
-
-        {/* Calorie summary + macro bars */}
-        <ScreenSection>
-          <Card>
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="flex items-baseline gap-1">
-                  <Text variant="hero">165</Text>
-                  <Text variant="body">kcal</Text>
-                </div>
-                <Text variant="caption" className="mt-1 block">
-                  per 100g serving
-                </Text>
-              </div>
-              <Thumbnail size="md" tone="icon">
-                <Icon as={FireIcon} size="feature" />
-              </Thumbnail>
-            </div>
-            <div className="mt-4 space-y-3">
-              {MACROS.map((macro) => (
-                <MacroBar key={macro.label} {...macro} />
-              ))}
-            </div>
-          </Card>
-        </ScreenSection>
 
         {/* Add to Meal — scrollable meal segments, Breakfast selected */}
         <ScreenSection title="Add to Meal">
@@ -230,9 +187,9 @@ export default function FoodDetails() {
               </span>
               <Text variant="section">165 kcal</Text>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3 !mt-3">
               {STATS.map((stat) => (
-                <StatCard key={stat.label} value={stat.value} label={stat.label} />
+                <StatCard key={stat.label} icon={stat.icon} value={stat.value} label={stat.label} />
               ))}
             </div>
             <DetailList>
