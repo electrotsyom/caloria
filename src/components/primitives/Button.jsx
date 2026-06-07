@@ -18,6 +18,7 @@ const VARIANTS = {
 export default function Button({
   variant = 'primary',
   leadingIcon,
+  trailingIcon,
   fullWidth = true,
   type = 'button',
   className,
@@ -37,6 +38,7 @@ export default function Button({
     >
       {leadingIcon && <Icon as={leadingIcon} size="inline" />}
       {children}
+      {trailingIcon && <Icon as={trailingIcon} size="inline" />}
     </button>
   )
 }

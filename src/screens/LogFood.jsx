@@ -12,7 +12,6 @@ import {
   ScreenSection,
   ScrollRow,
   SearchInput,
-  Pill,
   Card,
   Thumbnail,
   ListRow,
@@ -33,8 +32,6 @@ import {
  * Popular Foods follows the plan's §"Special Notes" as a vertical food-row list.
  */
 
-const MEALS = ['Breakfast', 'Lunch', 'Dinner', 'Snacks']
-
 const QUICK_ACTIONS = [
   { label: 'Scan Barcode', icon: ViewfinderCircleIcon },
   { label: 'Snap Photo', icon: CameraIcon },
@@ -52,6 +49,12 @@ const POPULAR_FOODS = [
   { name: 'Rice', detail: '1 cup · 158g', kcal: '205' },
   { name: 'Broccoli', detail: '1 cup · 91g', kcal: '31' },
   { name: 'Cheese', detail: '1 slice · 28g', kcal: '113' },
+]
+
+const FAVOURITES = [
+  { name: 'Overnight Oats', detail: '1 jar · 240g', kcal: '290' },
+  { name: 'Grilled Chicken Breast', detail: '1 breast · 120g', kcal: '198' },
+  { name: 'Protein Shake', detail: '1 scoop · 350ml', kcal: '160' },
 ]
 
 const RECENTLY_LOGGED = [
@@ -127,21 +130,10 @@ export default function LogFood() {
           </div>
         </ScreenSection>
 
-        {/* Meal Time — scrollable meal pills, Breakfast selected, clipped right */}
-        <ScreenSection title="Meal Time" action={<SectionLink>Today</SectionLink>}>
-          <ScrollRow bleed>
-            {MEALS.map((label, i) => (
-              <Pill key={label} selected={i === 0}>
-                {label}
-              </Pill>
-            ))}
-          </ScrollRow>
-        </ScreenSection>
-
-        {/* Popular Foods — vertical food-row list */}
-        <ScreenSection title="Popular Foods" action={<SectionLink>See all</SectionLink>}>
+        {/* Favourites — vertical food-row list */}
+        <ScreenSection title="Favourites" action={<SectionLink>See all</SectionLink>}>
           <div className="space-y-3">
-            {POPULAR_FOODS.map((food) => (
+            {FAVOURITES.map((food) => (
               <ListRow
                 key={food.name}
                 onClick={openDetail}
@@ -160,6 +152,24 @@ export default function LogFood() {
         <ScreenSection title="Recently Logged" action={<SectionLink>Clear</SectionLink>}>
           <div className="space-y-3">
             {RECENTLY_LOGGED.map((food) => (
+              <ListRow
+                key={food.name}
+                onClick={openDetail}
+                className="cursor-pointer"
+                leading={<Thumbnail size="md" className="!h-16 !w-16 !rounded-r-none" />}
+                title={food.name}
+                subtitle={food.detail}
+                trailing={<KcalValue>{food.kcal}</KcalValue>}
+                action={addAction}
+              />
+            ))}
+          </div>
+        </ScreenSection>
+
+        {/* Popular Foods — vertical food-row list */}
+        <ScreenSection title="Popular Foods" action={<SectionLink>See all</SectionLink>}>
+          <div className="space-y-3">
+            {POPULAR_FOODS.map((food) => (
               <ListRow
                 key={food.name}
                 onClick={openDetail}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ChevronLeftIcon,
@@ -30,6 +30,7 @@ import {
   Stepper,
   ProgressBar,
   StatCard,
+  Toast,
   TabBar,
   TabItem,
   ListRow,
@@ -79,6 +80,17 @@ const INGREDIENTS = [
   { name: 'Garlic Cloves', note: 'Minced', amount: '4 cloves', per: '2 cloves/serving' },
   { name: 'Black Pepper', note: 'Freshly ground', amount: '1 tsp', per: '½ tsp/serving' },
   { name: 'Sea Salt', note: 'To taste', amount: '1 tsp', per: '½ tsp/serving' },
+]
+
+// Numbered method steps for the Instructions tab. Each step pairs a short
+// title with a one-line description; the trailing time is the active step's
+// hands-on estimate (sums to the 25 min hero meta).
+const INSTRUCTIONS = [
+  { title: 'Prep the salmon', detail: 'Pat the fillets dry and season both sides with sea salt and freshly ground black pepper.', time: '3 min' },
+  { title: 'Make the herb marinade', detail: 'Whisk olive oil, minced garlic, chopped dill, and the juice of two lemons in a small bowl.', time: '4 min' },
+  { title: 'Marinate', detail: 'Coat the salmon in the marinade and rest while the grill preheats to medium-high.', time: '10 min' },
+  { title: 'Grill the fillets', detail: 'Grill skin-side down for 4–5 min, flip once, then cook until the flesh is opaque and flakes.', time: '6 min' },
+  { title: 'Rest and serve', detail: 'Let the salmon rest briefly, then finish with lemon wedges and a scatter of fresh dill.', time: '2 min' },
 ]
 
 const MEALS = ['Breakfast', 'Lunch', 'Dinner', 'Snacks']
@@ -131,15 +143,30 @@ export default function RecipeDetail() {
   const navigate = useNavigate()
   const [servings, setServings] = useState(1)
   const [activeTab, setActiveTab] = useState('nutrition')
+  const [showToast, setShowToast] = useState(false)
+  const toastTimer = useRef(null)
 
-  // Sticky Cancel / Record bar, pinned to the bottom of the frame.
+  // Record is presentational: confirm with a transient success toast that
+  // auto-dismisses. (Screen-level behavior — there is no Toast library component.)
+  const handleRecord = () => {
+    setShowToast(true)
+    if (toastTimer.current) clearTimeout(toastTimer.current)
+    toastTimer.current = setTimeout(() => setShowToast(false), 2500)
+  }
+
+  // Clear any pending dismiss timer on unmount.
+  useEffect(() => () => clearTimeout(toastTimer.current), [])
+
+  // Sticky Cancel / Record bar, pinned to the bottom of the frame, with a
+  // success toast floating just above it.
   const stickyFooter = (
-    <div className="border-t border-neutral-200 bg-white pb-[env(safe-area-inset-bottom)]">
+    <div className="relative border-t border-neutral-200 bg-white pb-[env(safe-area-inset-bottom)]">
+      <Toast show={showToast}>Recipe recorded to your log</Toast>
       <div className="flex items-center gap-3 px-4 py-3">
         <Button variant="secondary" fullWidth={false} className="px-6" onClick={() => navigate(-1)}>
           Cancel
         </Button>
-        <Button variant="primary" className="flex-1" leadingIcon={PlusCircleIcon}>
+        <Button variant="primary" className="flex-1" trailingIcon={PlusCircleIcon} onClick={handleRecord}>
           Record
         </Button>
       </div>
@@ -225,7 +252,7 @@ export default function RecipeDetail() {
 
         {/* Tabs + ingredient list */}
         <ScreenSection>
-          <TabBar className="border-b border-neutral-200">
+          <TabBar variant="pills">
             {TABS.map((tab) => (
               <TabItem key={tab.key} active={activeTab === tab.key} onClick={() => setActiveTab(tab.key)}>
                 <span className="inline-flex items-center gap-1.5">
@@ -236,7 +263,33 @@ export default function RecipeDetail() {
             ))}
           </TabBar>
 
-          {/* The Instructions panel is off-screen and not invented. */}
+          {/* Instructions — numbered method steps */}
+          {activeTab === 'instructions' && (
+            <Card className="mt-2">
+              <ol className="space-y-4">
+                {INSTRUCTIONS.map((item, i) => (
+                  <li key={item.title} className="flex gap-3">
+                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-neutral-900 text-sm font-semibold text-white">
+                      {i + 1}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <Text variant="cardTitle">{item.title}</Text>
+                        <span className="flex shrink-0 items-center gap-1">
+                          <Icon as={ClockIcon} size="small" className="text-neutral-400" />
+                          <Text variant="caption">{item.time}</Text>
+                        </span>
+                      </div>
+                      <Text variant="body" className="mt-0.5 block">
+                        {item.detail}
+                      </Text>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </Card>
+          )}
+
           {activeTab === 'ingredients' && (
             <Card className="mt-2">
               <DetailList>

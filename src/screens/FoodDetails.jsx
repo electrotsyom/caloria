@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ChevronLeftIcon,
@@ -6,6 +6,7 @@ import {
   HeartIcon,
   FireIcon,
   CheckBadgeIcon,
+  PlusCircleIcon,
   CubeTransparentIcon,
   BeakerIcon,
 } from '@heroicons/react/24/outline'
@@ -22,6 +23,7 @@ import {
   Stepper,
   StatCard,
   ProgressBar,
+  Toast,
   DetailRow,
   DetailList,
   Text,
@@ -85,16 +87,31 @@ function HeroMeta({ icon, children }) {
 export default function FoodDetails() {
   const navigate = useNavigate()
   const [qty, setQty] = useState(100)
+  const [showToast, setShowToast] = useState(false)
+  const toastTimer = useRef(null)
 
-  // Sticky Cancel / Record Food bar, pinned to the bottom of the frame.
+  // Record Food is presentational: confirm with a transient success toast that
+  // auto-dismisses. (Screen-level behavior.)
+  const handleRecord = () => {
+    setShowToast(true)
+    if (toastTimer.current) clearTimeout(toastTimer.current)
+    toastTimer.current = setTimeout(() => setShowToast(false), 2500)
+  }
+
+  // Clear any pending dismiss timer on unmount.
+  useEffect(() => () => clearTimeout(toastTimer.current), [])
+
+  // Sticky Cancel / Record Food bar, pinned to the bottom of the frame, with a
+  // success toast floating just above it.
   const stickyFooter = (
-    <div className="border-t border-neutral-200 bg-white pb-[env(safe-area-inset-bottom)]">
+    <div className="relative border-t border-neutral-200 bg-white pb-[env(safe-area-inset-bottom)]">
+      <Toast show={showToast}>Food recorded to your log</Toast>
       <div className="flex items-center gap-3 px-4 py-3">
         <Button variant="secondary" fullWidth={false} className="px-6" onClick={() => navigate(-1)}>
           Cancel
         </Button>
-        <Button variant="primary" className="flex-1" leadingIcon={CheckBadgeIcon}>
-          Record Food
+        <Button variant="primary" className="flex-1" trailingIcon={PlusCircleIcon} onClick={handleRecord}>
+          Record
         </Button>
       </div>
     </div>
