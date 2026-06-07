@@ -12,20 +12,27 @@ import { cn } from '../../lib/cn'
  * State (grayscale):
  *   selected   → bg-neutral-900 text-white font-medium
  *   unselected → border-neutral-200 bg-white text-neutral-500
+ *   filled     → bg-neutral-100 text-neutral-700 (static grey chip, e.g. an
+ *                active filter tag; `selected` is ignored)
  * Size:
- *   md (h-9 px-4) → segmented meal/filter/size pills
- *   sm (h-8 px-3) → food chips in a chip cloud
+ *   md  (h-9 px-4)    → segmented meal/filter/size pills
+ *   sm  (h-8 px-3)    → food chips in a chip cloud
+ *   xs  (h-6 px-2.5)  → compact removable filter chips
+ *   2xs (h-4 px-1.5)  → micro removable filter chips
  *
  * `leading` / `trailing` accept an emoji string or an <Icon/> node (e.g. a
  * chevron to mark the pill as a dropdown trigger).
  */
 const SIZES = {
-  md: 'h-9 px-4',
-  sm: 'h-8 px-3',
+  md: 'h-9 px-4 gap-2 text-sm',
+  sm: 'h-8 px-3 gap-2 text-sm',
+  xs: 'h-6 px-2.5 gap-2 text-sm',
+  '2xs': 'h-4 px-1.5 gap-1 text-xs',
 }
 
 export default function Pill({
   selected = false,
+  filled = false,
   leading,
   trailing,
   size = 'md',
@@ -35,14 +42,17 @@ export default function Pill({
   ...rest
 }) {
   const interactiveProps = Comp === 'button' ? { type: 'button', 'aria-pressed': selected } : {}
+  const tone = filled
+    ? 'bg-neutral-100 text-neutral-700'
+    : selected
+      ? 'bg-neutral-900 font-medium text-white'
+      : 'border border-neutral-200 bg-white text-neutral-500'
   return (
     <Comp
       className={cn(
-        'inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full text-sm',
+        'inline-flex shrink-0 items-center whitespace-nowrap rounded-full',
         SIZES[size],
-        selected
-          ? 'bg-neutral-900 font-medium text-white'
-          : 'border border-neutral-200 bg-white text-neutral-500',
+        tone,
         className,
       )}
       {...interactiveProps}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ChevronLeftIcon,
+  ChevronDownIcon,
   ShareIcon,
   HeartIcon,
   FireIcon,
@@ -27,7 +28,7 @@ import {
   Button,
   IconButton,
   Stepper,
-  MacroSummary,
+  ProgressBar,
   StatCard,
   TabBar,
   TabItem,
@@ -67,12 +68,8 @@ import {
  *  - Record is presentational; its success behavior is undefined → no-op.
  */
 
-const MACROS = [
-  { value: '16g', label: 'Carbs' },
-  { value: '84g', label: 'Protein' },
-  { value: '28g', label: 'Fat' },
-  { value: '4g', label: 'Fiber' },
-]
+// The chosen serving size, shown as a dropdown pill next to the servings stepper.
+const SELECTED_SERVING = 'serving'
 
 const INGREDIENTS = [
   { name: 'Salmon Fillet', note: 'Fresh, skin-on', amount: '300g', per: '150g/serving' },
@@ -87,8 +84,8 @@ const INGREDIENTS = [
 const MEALS = ['Breakfast', 'Lunch', 'Dinner', 'Snacks']
 
 // Nutrition tab — mirrors Food Details' Nutrition Summary, using this
-// recipe's own macros (see MACROS / 640 kcal). The mineral rows are
-// wireframe placeholders, consistent with the rest of the screen.
+// recipe's own macros (84g protein / 16g carbs / 28g fat, 640 kcal). The
+// mineral rows are wireframe placeholders, consistent with the rest of the screen.
 const NUTRITION_STATS = [
   { value: '84g', label: 'Protein', icon: CubeTransparentIcon },
   { value: '16g', label: 'Carbs', icon: PlantIcon },
@@ -103,9 +100,9 @@ const NUTRITION_DETAILS = [
 ]
 
 const TABS = [
+  { key: 'nutrition', label: 'Nutrition', icon: ChartPieIcon },
   { key: 'ingredients', label: 'Ingredients', icon: ListBulletIcon },
   { key: 'instructions', label: 'Instructions', icon: BookOpenIcon },
-  { key: 'nutrition', label: 'Nutrition', icon: ChartPieIcon },
 ]
 
 /* A meta item over the hero scrim: small icon + white caption text. */
@@ -132,8 +129,8 @@ function Amount({ amount, per }) {
 
 export default function RecipeDetail() {
   const navigate = useNavigate()
-  const [servings, setServings] = useState(2)
-  const [activeTab, setActiveTab] = useState('ingredients')
+  const [servings, setServings] = useState(1)
+  const [activeTab, setActiveTab] = useState('nutrition')
 
   // Sticky Cancel / Record bar, pinned to the bottom of the frame.
   const stickyFooter = (
@@ -184,34 +181,15 @@ export default function RecipeDetail() {
           </div>
         </div>
 
-        {/* Servings + calories + macro summary */}
-        <ScreenSection>
-          <Card className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Stepper
-                  value={servings}
-                  valueLabel="Servings"
-                  decrementLabel="Fewer servings"
-                  incrementLabel="More servings"
-                  onValueChange={(v) => setServings(v.replace(/[^0-9]/g, ''))}
-                  onDecrement={() => setServings((n) => Math.max(1, (parseInt(n, 10) || 1) - 1))}
-                  onIncrement={() => setServings((n) => (parseInt(n, 10) || 0) + 1)}
-                />
-                <Text variant="body">servings</Text>
-              </div>
-              <div className="flex items-baseline gap-1">
-                <Icon as={FireIcon} size="inline" className="self-center text-neutral-400" />
-                <Text variant="hero">640</Text>
-                <Text variant="body">kcal</Text>
-              </div>
-            </div>
-            <MacroSummary items={MACROS} />
-          </Card>
-        </ScreenSection>
-
         {/* Add to Meal — scrollable meal segments, Breakfast selected */}
-        <ScreenSection title="Add to Meal">
+        <ScreenSection
+          title="Add to Meal"
+          action={
+            <button type="button">
+              <Text variant="link">Today</Text>
+            </button>
+          }
+        >
           <ScrollRow bleed>
             {MEALS.map((meal, i) => (
               <Pill key={meal} selected={i === 0}>
@@ -219,6 +197,30 @@ export default function RecipeDetail() {
               </Pill>
             ))}
           </ScrollRow>
+        </ScreenSection>
+
+        {/* Serving & Quantity — servings stepper + serving-size dropdown pill */}
+        <ScreenSection>
+          <Card className="space-y-4">
+            <Text as="h2" variant="section">
+              Serving &amp; Quantity
+            </Text>
+            <div className="flex items-center justify-between">
+              <Stepper
+                value={servings}
+                valueLabel="Servings"
+                inputClassName="h-12 w-16 rounded-xl border border-neutral-200 bg-white px-4 text-sm text-neutral-900"
+                decrementLabel="Fewer servings"
+                incrementLabel="More servings"
+                onValueChange={(v) => setServings(v.replace(/[^0-9]/g, ''))}
+                onDecrement={() => setServings((n) => Math.max(1, (parseInt(n, 10) || 1) - 1))}
+                onIncrement={() => setServings((n) => (parseInt(n, 10) || 0) + 1)}
+              />
+              <Pill selected trailing={<Icon as={ChevronDownIcon} size="small" />}>
+                {SELECTED_SERVING}
+              </Pill>
+            </div>
+          </Card>
         </ScreenSection>
 
         {/* Tabs + ingredient list */}
@@ -281,6 +283,24 @@ export default function RecipeDetail() {
               </DetailList>
             </Card>
           )}
+        </ScreenSection>
+
+        {/* Impact on Daily Goal — remaining + progress + consumed meta */}
+        <ScreenSection>
+          <Card className="space-y-3">
+            <Text as="h2" variant="section">
+              Impact on Daily Goal
+            </Text>
+            <div className="flex items-center justify-between">
+              <Text variant="body">Calories remaining</Text>
+              <Text variant="cardTitle">1,160 kcal left</Text>
+            </div>
+            <ProgressBar value={36} />
+            <div className="flex items-center justify-between">
+              <Text variant="caption">640 / 1,800 kcal consumed</Text>
+              <Text variant="caption">+640 kcal</Text>
+            </div>
+          </Card>
         </ScreenSection>
       </Screen>
     </MobileFrame>

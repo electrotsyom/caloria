@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import {
   AdjustmentsHorizontalIcon,
-  ArrowsUpDownIcon,
+  BarsArrowDownIcon,
   ArrowPathIcon,
   ClockIcon,
   FireIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
 import {
@@ -13,7 +14,6 @@ import {
   Screen,
   ScreenHeader,
   ScreenSection,
-  ScrollRow,
   SearchInput,
   Pill,
   MediaCard,
@@ -35,9 +35,8 @@ import {
  * (see screen-recreation-plan.md §"Screen 3"). No new components.
  */
 
-// Row 1 = diet/calorie filters, Row 2 = meal filters. Leading pill selected in each.
-const DIET_FILTERS = ['All', 'Low Calorie', 'High Protein']
-const MEAL_FILTERS = ['Any Meal', 'Breakfast', 'Lunch', 'Dinner']
+// Active filter chips shown under the search bar (each removable via the × icon).
+const ACTIVE_FILTERS = ['High Protein', 'Vegan', 'Vegetarian', 'Keto']
 
 const RECIPES = [
   { name: 'Grilled Lemon Herb Salmon', tag: 'Low Cal', meta: 'Dinner · High Protein', rating: '4.8', reviews: '132', time: '25 min', kcal: '320 kcal', protein: '42g P' },
@@ -97,10 +96,15 @@ export default function Recipes() {
     </div>
   )
 
+  // Sort recipes by calories, least → most.
+  const sortedRecipes = [...RECIPES].sort(
+    (a, b) => parseInt(a.kcal, 10) - parseInt(b.kcal, 10),
+  )
+
   const sortAction = (
     <button type="button" className="flex items-center gap-1">
       <Text variant="link">Calories</Text>
-      <Icon as={ArrowsUpDownIcon} size="small" className="text-neutral-900" />
+      <Icon as={BarsArrowDownIcon} size="small" className="text-neutral-900" />
     </button>
   )
 
@@ -114,22 +118,22 @@ export default function Recipes() {
           <SearchInput placeholder="Search recipes…" />
         </ScreenSection>
 
-        {/* Two scrollable filter-pill rows, clipped at the right edge */}
-        <ScreenSection className="space-y-3">
-          <ScrollRow bleed>
-            {DIET_FILTERS.map((label, i) => (
-              <Pill key={label} selected={i === 0}>
+        {/* Active filter chips, each removable via the × icon */}
+        <ScreenSection>
+          <div className="flex flex-wrap gap-2">
+            {ACTIVE_FILTERS.map((label) => (
+              <Pill
+                key={label}
+                filled
+                size="xs"
+                trailing={
+                  <Icon as={XMarkIcon} size="small" className="text-neutral-500" />
+                }
+              >
                 {label}
               </Pill>
             ))}
-          </ScrollRow>
-          <ScrollRow bleed>
-            {MEAL_FILTERS.map((label, i) => (
-              <Pill key={label} selected={i === 0}>
-                {label}
-              </Pill>
-            ))}
-          </ScrollRow>
+          </div>
         </ScreenSection>
 
         {/* Featured hero recipe */}
@@ -162,7 +166,7 @@ export default function Recipes() {
         {/* Result count + sort, then the recipe list */}
         <ScreenSection title="24 Recipes Found" action={sortAction}>
           <div className="space-y-3">
-            {RECIPES.map((recipe) => (
+            {sortedRecipes.map((recipe) => (
               <RecipeRow key={recipe.name} recipe={recipe} onOpen={openDetail} />
             ))}
           </div>

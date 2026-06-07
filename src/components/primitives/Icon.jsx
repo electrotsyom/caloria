@@ -13,6 +13,7 @@ const SIZES = {
   nav: 'h-6 w-6', // bottom-nav tabs, header back chevron
   inline: 'h-5 w-5', // search magnifier, in-row glyphs, stat icons
   small: 'h-4 w-4', // mic, badge/meta, rating star
+  tiny: 'h-3 w-3', // dismiss × on compact chips
   feature: 'h-8 w-8', // quick-action tiles, hero glyphs
 }
 
