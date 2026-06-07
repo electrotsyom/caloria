@@ -16,7 +16,8 @@ import { cn } from '../../lib/cn'
  *   md (h-9 px-4) → segmented meal/filter/size pills
  *   sm (h-8 px-3) → food chips in a chip cloud
  *
- * `leading` accepts an emoji string or an <Icon/> node.
+ * `leading` / `trailing` accept an emoji string or an <Icon/> node (e.g. a
+ * chevron to mark the pill as a dropdown trigger).
  */
 const SIZES = {
   md: 'h-9 px-4',
@@ -26,6 +27,7 @@ const SIZES = {
 export default function Pill({
   selected = false,
   leading,
+  trailing,
   size = 'md',
   as: Comp = 'button',
   className,
@@ -48,6 +50,7 @@ export default function Pill({
     >
       {leading}
       {children}
+      {trailing}
     </Comp>
   )
 }

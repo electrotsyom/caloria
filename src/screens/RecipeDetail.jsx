@@ -191,10 +191,12 @@ export default function RecipeDetail() {
               <div className="flex items-center gap-3">
                 <Stepper
                   value={servings}
+                  valueLabel="Servings"
                   decrementLabel="Fewer servings"
                   incrementLabel="More servings"
-                  onDecrement={() => setServings((n) => Math.max(1, n - 1))}
-                  onIncrement={() => setServings((n) => n + 1)}
+                  onValueChange={(v) => setServings(v.replace(/[^0-9]/g, ''))}
+                  onDecrement={() => setServings((n) => Math.max(1, (parseInt(n, 10) || 1) - 1))}
+                  onIncrement={() => setServings((n) => (parseInt(n, 10) || 0) + 1)}
                 />
                 <Text variant="body">servings</Text>
               </div>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ChevronLeftIcon,
+  ChevronDownIcon,
   HeartIcon,
   FireIcon,
   CheckBadgeIcon,
@@ -53,7 +54,8 @@ import {
  */
 
 const MEALS = ['Breakfast', 'Lunch', 'Dinner', 'Snacks']
-const SERVING_SIZES = ['100g', '1 piece', '1 oz', 'Custom']
+// The selected serving, shown as a dropdown pill next to the quantity stepper.
+const SELECTED_SERVING = 'grams (g)'
 
 // Nutrition Summary stat boxes (3-up).
 const STATS = [
@@ -82,7 +84,7 @@ function HeroMeta({ icon, children }) {
 
 export default function FoodDetails() {
   const navigate = useNavigate()
-  const [qty, setQty] = useState(1)
+  const [qty, setQty] = useState(100)
 
   // Sticky Cancel / Record Food bar, pinned to the bottom of the frame.
   const stickyFooter = (
@@ -132,7 +134,14 @@ export default function FoodDetails() {
         </div>
 
         {/* Add to Meal — scrollable meal segments, Breakfast selected */}
-        <ScreenSection title="Add to Meal">
+        <ScreenSection
+          title="Add to Meal"
+          action={
+            <button type="button">
+              <Text variant="link">Today</Text>
+            </button>
+          }
+        >
           <ScrollRow bleed>
             {MEALS.map((meal, i) => (
               <Pill key={meal} selected={i === 0}>
@@ -142,31 +151,24 @@ export default function FoodDetails() {
           </ScrollRow>
         </ScreenSection>
 
-        {/* Serving & Quantity — serving-size pills + quantity stepper */}
+        {/* Serving & Quantity — quantity stepper + serving dropdown pill */}
         <ScreenSection>
           <Card className="space-y-4">
             <Text as="h2" variant="section">
               Serving &amp; Quantity
             </Text>
-            <div>
-              <Text variant="body" className="mb-2 block">
-                Serving Size
-              </Text>
-              <div className="flex flex-wrap gap-2">
-                {SERVING_SIZES.map((size, i) => (
-                  <Pill key={size} selected={i === 0}>
-                    {size}
-                  </Pill>
-                ))}
-              </div>
-            </div>
             <div className="flex items-center justify-between">
-              <Text variant="body">Quantity</Text>
               <Stepper
                 value={qty}
-                onDecrement={() => setQty((n) => Math.max(1, n - 1))}
-                onIncrement={() => setQty((n) => n + 1)}
+                valueLabel="Quantity"
+                inputClassName="h-12 w-16 rounded-xl border border-neutral-200 bg-white px-4 text-sm text-neutral-900"
+                onValueChange={(v) => setQty(v.replace(/[^0-9]/g, ''))}
+                onDecrement={() => setQty((n) => Math.max(1, (parseInt(n, 10) || 1) - 1))}
+                onIncrement={() => setQty((n) => (parseInt(n, 10) || 0) + 1)}
               />
+              <Pill selected trailing={<Icon as={ChevronDownIcon} size="small" />}>
+                {SELECTED_SERVING}
+              </Pill>
             </div>
           </Card>
         </ScreenSection>
