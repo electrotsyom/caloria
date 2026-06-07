@@ -30,7 +30,7 @@ export default function App() {
   return (
     <Routes>
       {/* Default landing */}
-      <Route path="/" element={<Navigate to="/log" replace />} />
+      <Route path="/" element={<Navigate to="/recipes" replace />} />
 
       {/* In-scope wireframes (built one at a time) */}
       <Route path="/recipes" element={<Recipes />} />
