@@ -24,13 +24,13 @@ const TABS = [
   { to: '/profile', label: 'Profile', Icon: UserCircleIcon, ActiveIcon: UserCircleIconSolid },
 ]
 
-/* A standard (non-center) tab. */
+/* A standard tab inside the floating pill. */
 function NavTab({ to, label, Icon, ActiveIcon }) {
   return (
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex flex-1 flex-col items-center justify-center gap-1 py-2 text-xs font-medium transition-colors ${
+        `flex flex-1 flex-col items-center justify-center gap-1 py-2.5 text-xs font-medium transition-colors ${
           isActive ? 'text-neutral-900' : 'text-neutral-400 hover:text-neutral-600'
         }`
       }
@@ -55,30 +55,32 @@ function NavTab({ to, label, Icon, ActiveIcon }) {
 /**
  * BottomNav
  *
- * Five-tab bar pinned inside the MobileFrame: Home · Recipes · Add (center,
- * raised) · Reports · Profile. The center "Add" action is a raised, circular
- * button that floats above the bar.
+ * A floating navigation that hovers above the screen content near the bottom of
+ * the MobileFrame: a rounded "pill" holding the four primary tabs (Home ·
+ * Recipes · Reports · Profile) and a separate circular Add button detached to
+ * its right. The Add action opens the merged Log Food screen at /log.
+ *
+ * The outer <nav> is absolutely positioned over the scroll area (the frame is
+ * `relative`) and uses `pointer-events-none` so it never blocks taps on the
+ * content behind the gaps; the pill and button re-enable pointer events. Screens
+ * reserve clearance via the Screen component's `pb-24`.
  */
 export default function BottomNav() {
   return (
-    <nav className="relative border-t border-neutral-200 bg-white">
-      <div className="flex h-16 items-stretch px-2 pb-[env(safe-area-inset-bottom)]">
+    <nav className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-center gap-3 px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
+      {/* Floating pill with the four primary tabs */}
+      <div className="pointer-events-auto flex flex-1 items-stretch rounded-full border border-neutral-200 bg-white/90 px-2 shadow-lg backdrop-blur">
         <NavTab {...TABS[0]} />
         <NavTab {...TABS[1]} />
-
-        {/* Center spacer reserves room for the raised Add button */}
-        <div className="flex w-16 flex-shrink-0 items-center justify-center" />
-
         <NavTab {...TABS[2]} />
         <NavTab {...TABS[3]} />
       </div>
 
-      {/* Raised center Add button (the FAB is the circle, so it renders a plain PlusIcon).
-          Navigation map: the Add action opens the merged Log Food screen at /log. */}
+      {/* Separate, detached Add button on the right */}
       <NavLink
         to="/log"
         aria-label="Add"
-        className="absolute left-1/2 top-0 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-neutral-900 text-white shadow-lg transition-colors hover:bg-neutral-700"
+        className="pointer-events-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-neutral-900 text-white shadow-lg transition-colors hover:bg-neutral-700"
       >
         <PlusIcon className="h-7 w-7" />
       </NavLink>

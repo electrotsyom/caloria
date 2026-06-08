@@ -61,11 +61,14 @@ function RecipeRow({ recipe, onOpen }) {
   return (
     <ListRow
       onClick={onOpen}
-      className="cursor-pointer"
+      className="h-24 cursor-pointer overflow-hidden"
+      contentClassName="flex h-full flex-col justify-between py-0.5"
       leading={<Thumbnail size="lg" className="!h-24 !w-24 !rounded-r-none" />}
-      title={recipe.name}
-      subtitle={
-        <div className="mt-1 space-y-1">
+      title={
+        <>
+          <Text variant="cardTitle" className="block truncate">
+            {recipe.name}
+          </Text>
           <Text variant="caption" className="block">
             {recipe.meta}
           </Text>
@@ -79,7 +82,7 @@ function RecipeRow({ recipe, onOpen }) {
             <Stat icon={ClockIcon}>{recipe.time}</Stat>
             <Stat icon={FireIcon}>{recipe.kcal}</Stat>
           </div>
-        </div>
+        </>
       }
     />
   )

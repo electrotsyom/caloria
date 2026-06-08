@@ -137,7 +137,7 @@ export default function LogFood() {
               <ListRow
                 key={food.name}
                 onClick={openDetail}
-                className="cursor-pointer"
+                className="h-16 cursor-pointer overflow-hidden"
                 leading={<Thumbnail size="md" className="!h-16 !w-16 !rounded-r-none" />}
                 title={food.name}
                 subtitle={food.detail}
@@ -155,7 +155,7 @@ export default function LogFood() {
               <ListRow
                 key={food.name}
                 onClick={openDetail}
-                className="cursor-pointer"
+                className="h-16 cursor-pointer overflow-hidden"
                 leading={<Thumbnail size="md" className="!h-16 !w-16 !rounded-r-none" />}
                 title={food.name}
                 subtitle={food.detail}
@@ -173,7 +173,7 @@ export default function LogFood() {
               <ListRow
                 key={food.name}
                 onClick={openDetail}
-                className="cursor-pointer"
+                className="h-16 cursor-pointer overflow-hidden"
                 leading={<Thumbnail size="md" className="!h-16 !w-16 !rounded-r-none" />}
                 title={food.name}
                 subtitle={food.detail}

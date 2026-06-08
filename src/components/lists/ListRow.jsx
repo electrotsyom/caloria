@@ -24,11 +24,12 @@ export default function ListRow({
   action,
   card = true,
   className,
+  contentClassName,
   ...rest
 }) {
   const body = (
     <>
-      <div className="min-w-0 flex-1">
+      <div className={cn('min-w-0 flex-1', contentClassName)}>
         {title &&
           (typeof title === 'string' ? (
             <Text variant="cardTitle" className="block truncate">
