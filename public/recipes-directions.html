@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Caloria — Dark Glass Directions · Recipes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+  button{ background:transparent; border:0; color:inherit; font:inherit; cursor:pointer; }
+  :root{ font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  body{
+    background:
+      radial-gradient(900px 600px at 50% -10%, #1c1c22, #0b0b0d 60%) ,
+      #08080a;
+    color:#fff; min-height:100vh; padding:40px 28px 60px;
+  }
+  .page-head{ text-align:center; max-width:1100px; margin:0 auto 34px; }
+  .page-head h1{ font-size:26px; font-weight:800; letter-spacing:-0.02em; }
+  .page-head p{ margin-top:8px; color:#9a9aa6; font-size:14px; line-height:1.5; }
+  .page-head .note{ margin-top:10px; color:#6c6c78; font-size:12px; }
+
+  .gallery{
+    display:flex; gap:34px; justify-content:center; align-items:flex-start;
+    flex-wrap:wrap; max-width:1720px; margin:0 auto;
+  }
+  .col{ width:375px; }
+  .label{ margin:0 4px 14px; }
+  .label .name{ font-size:16px; font-weight:700; display:flex; align-items:center; gap:9px; }
+  .label .swatches{ display:inline-flex; gap:5px; }
+  .label .swatches i{ width:11px; height:11px; border-radius:50%; display:inline-block; box-shadow:0 0 8px rgba(0,0,0,.4); }
+  .label .tag{ margin-top:5px; color:#86868f; font-size:12px; line-height:1.4; }
+
+  /* ---------- Phone frame ---------- */
+  .phone{
+    position:relative; width:375px; height:812px; border-radius:42px; overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 40px 90px rgba(0,0,0,.6), 0 0 0 9px #111114, 0 0 0 10px #28282e;
+  }
+  .canvas{ position:absolute; inset:0; }
+  .ambient{ position:absolute; inset:0; pointer-events:none; }
+  .ambient span{ position:absolute; border-radius:50%; filter:blur(46px); }
+
+  .screen{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    overflow-y:auto; overflow-x:hidden; scrollbar-width:none;
+  }
+  .screen::-webkit-scrollbar{ display:none; }
+  .pad{ padding-left:16px; padding-right:16px; }
+
+  /* status bar */
+  .status{ height:50px; display:flex; align-items:flex-end; justify-content:space-between;
+    padding:0 22px 6px; font-size:13px; font-weight:600; color:var(--ink); }
+  .status .dots{ display:flex; gap:5px; align-items:center; }
+  .status .dots b{ width:16px; height:10px; border:1.4px solid var(--ink); border-radius:3px; display:inline-block; opacity:.9; }
+
+  /* header */
+  header{ display:flex; align-items:flex-start; justify-content:space-between; padding:8px 16px 0; }
+  .eyebrow{ font-size:11px; font-weight:600; text-transform:uppercase; color:var(--meta); }
+  h1.title{ font-size:24px; font-weight:800; color:var(--ink); margin-top:3px; letter-spacing:-0.01em; }
+  .icon-btn{ position:relative; height:40px; width:40px; border-radius:50%;
+    display:grid; place-items:center; background:var(--chrome); border:1px solid var(--border);
+    backdrop-filter:blur(var(--blur-chrome)); -webkit-backdrop-filter:blur(var(--blur-chrome)); }
+  .icon-btn .dot{ position:absolute; top:7px; right:7px; width:8px; height:8px; border-radius:50%;
+    background:var(--accent); box-shadow:0 0 8px var(--accent-glow); }
+  svg{ display:block; }
+  .ink{ stroke:var(--ink); } .body{ stroke:var(--body); } .meta-s{ stroke:var(--meta); }
+  .accent-s{ stroke:var(--accent); } .accent-f{ fill:var(--accent); }
+
+  section{ margin-top:18px; }
+  .sec-head{ display:flex; align-items:center; justify-content:space-between; padding:0 16px; margin-bottom:11px; }
+  .sec-title{ font-size:16px; font-weight:700; color:var(--ink); }
+  .sort{ display:flex; align-items:center; gap:4px; font-size:13px; font-weight:600; color:var(--ink); }
+
+  /* search */
+  .search{ display:flex; align-items:center; gap:9px; height:48px; border-radius:14px;
+    padding:0 14px; background:var(--chrome); border:1px solid var(--border);
+    backdrop-filter:blur(var(--blur-chrome)); -webkit-backdrop-filter:blur(var(--blur-chrome)); }
+  .search input{ flex:1; background:transparent; border:0; outline:0; color:var(--ink); font-size:14px; }
+  .search input::placeholder{ color:var(--meta); }
+  .search .mic{ height:30px; width:30px; border-radius:50%; display:grid; place-items:center; background:var(--chip-bg); }
+
+  /* chips */
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{ height:30px; display:inline-flex; align-items:center; gap:6px; padding:0 12px;
+    border-radius:999px; font-size:12px; font-weight:600; }
+  .chip.sel{ color:var(--pill-ink); }
+  .chip .x{ display:grid; place-items:center; opacity:.85; }
+
+  /* featured */
+  .featured{ position:relative; height:176px; border-radius:18px; overflow:hidden; border:1px solid var(--border);
+    box-shadow:var(--shadow); background:linear-gradient(135deg,#2b2b33,#16161b); }
+  .featured img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .featured .scrim{ position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,.72) 4%, rgba(0,0,0,.15) 52%, transparent 100%); }
+  .featured .glow{ position:absolute; inset:-30% -10% auto -10%; height:70%;
+    background:radial-gradient(closest-side, var(--accent-glow), transparent); filter:blur(20px); opacity:.5; }
+  .badge{ position:absolute; top:12px; left:12px; height:24px; display:inline-flex; align-items:center; gap:5px;
+    padding:0 11px; border-radius:999px; font-size:11px; font-weight:700; }
+  .featured .info{ position:absolute; left:14px; right:14px; bottom:13px; color:#fff; }
+  .featured .info .ttl{ font-size:18px; font-weight:800; letter-spacing:-0.01em; }
+  .featured .info .meta{ display:flex; align-items:center; gap:14px; margin-top:7px; font-size:12px; font-weight:600; }
+  .featured .info .meta span{ display:inline-flex; align-items:center; gap:5px; }
+
+  /* recipe rows */
+  .rows{ display:flex; flex-direction:column; gap:12px; }
+  .row{ position:relative; display:flex; align-items:stretch; gap:0; min-height:96px; border-radius:18px; overflow:hidden;
+    background:var(--plate); border:1px solid var(--border); box-shadow:var(--shadow);
+    backdrop-filter:blur(var(--blur)); -webkit-backdrop-filter:blur(var(--blur)); }
+  .row .thumb{ position:relative; width:96px; min-width:96px; background:linear-gradient(135deg,#33333b,#1b1b20); }
+  .row .thumb img{ width:100%; height:100%; object-fit:cover; }
+  .row .thumb .tag{ position:absolute; top:7px; left:7px; height:20px; padding:0 8px; border-radius:999px;
+    font-size:10px; font-weight:700; display:inline-flex; align-items:center; }
+  .row .rbody{ flex:1; min-width:0; padding:12px 14px; display:flex; flex-direction:column; justify-content:center; }
+  .row .rname{ font-size:14px; font-weight:700; color:var(--ink); }
+  .row .rmeta{ font-size:11px; color:var(--meta); margin-top:3px; }
+  .row .stats{ display:flex; flex-wrap:wrap; align-items:center; gap:4px 12px; margin-top:7px; font-size:11px; color:var(--body); }
+  .row .stats span{ display:inline-flex; align-items:center; gap:4px; }
+  .row .kcal{ color:var(--accent); font-weight:700; }
+
+  /* load more */
+  .loadmore{ height:48px; width:100%; border-radius:14px; display:flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--chrome); border:1px solid var(--border); color:var(--body); font-size:14px; font-weight:600;
+    backdrop-filter:blur(var(--blur-chrome)); -webkit-backdrop-filter:blur(var(--blur-chrome)); }
+
+  /* bottom nav */
+  .navwrap{ position:absolute; left:0; right:0; bottom:0; height:96px; }
+  .nav{ position:absolute; inset:0; display:flex; align-items:flex-start; justify-content:space-between;
+    padding:12px 26px 0; background:var(--nav-bg); border-top:1px solid var(--border);
+    backdrop-filter:blur(var(--blur-chrome)); -webkit-backdrop-filter:blur(var(--blur-chrome)); }
+  .nav .item{ display:flex; flex-direction:column; align-items:center; gap:4px; width:46px; font-size:10px; font-weight:600; color:var(--meta); }
+  .nav .item.active{ color:var(--ink); }
+  .fab{ position:absolute; left:50%; top:-6px; transform:translateX(-50%); height:56px; width:56px; border-radius:50%;
+    display:grid; place-items:center; background:var(--fab-bg); box-shadow:var(--fab-shadow); border:var(--fab-border); }
+
+  /* =================== THEME: AURORA =================== */
+  .theme-aurora{
+    --ink:#F2F7F4; --body:#A8B7B0; --meta:#74837C;
+    --accent:#6FE3B5; --accent-glow:rgba(111,227,181,.45);
+    --chrome:rgba(255,255,255,.06); --border:rgba(255,255,255,.10);
+    --plate:rgba(14,21,18,.62); --blur:16px; --blur-chrome:24px;
+    --shadow:none;
+    --chip-bg:rgba(255,255,255,.08); --pill-ink:#06140e;
+    --nav-bg:rgba(10,15,13,.55);
+    --fab-bg:#6FE3B5; --fab-shadow:none; --fab-border:none;
+  }
+  .theme-aurora .canvas{ background:linear-gradient(160deg,#070B09,#080C0A); }
+  .theme-aurora .ambient span{ filter:blur(70px); }
+  .theme-aurora .ambient span:nth-child(1){ width:280px;height:280px; top:-40px; left:-60px; background:#3FB59B; opacity:.14; }
+  .theme-aurora .ambient span:nth-child(2){ width:320px;height:320px; top:120px; right:-90px; background:#5FC9D6; opacity:.11; }
+  .theme-aurora .ambient span:nth-child(3){ width:300px;height:300px; top:360px; left:-70px; background:#7FD1A6; opacity:.09; }
+  .theme-aurora .ambient span:nth-child(4){ width:260px;height:260px; bottom:60px; right:-60px; background:#E8A487; opacity:.07; }
+  .theme-aurora .chip.sel{ background:rgba(111,227,181,.92); }
+  .theme-aurora .chip .x svg{ stroke:#06140e; }
+  .theme-aurora .badge{ background:rgba(232,164,135,.92); color:#241008; }
+
+  /* =================== THEME: NEON =================== */
+  .theme-neon{
+    --ink:#FFFFFF; --body:#B6BAC4; --meta:#7C8190;
+    --accent:#C6FF3A; --accent-glow:rgba(198,255,58,.5);
+    --chrome:rgba(255,255,255,.05); --border:rgba(255,255,255,.08);
+    --plate:rgba(13,14,18,.74); --blur:12px; --blur-chrome:14px;
+    --shadow:0 6px 24px rgba(0,0,0,.5);
+    --chip-bg:rgba(255,255,255,.06); --pill-ink:#0c0c0c;
+    --nav-bg:rgba(7,7,9,.6);
+    --fab-bg:#C6FF3A; --fab-shadow:0 0 26px rgba(198,255,58,.6),0 10px 24px rgba(0,0,0,.5); --fab-border:none;
+  }
+  .theme-neon .canvas{ background:radial-gradient(120% 80% at 50% 0%, #14151b, #070708 70%); }
+  .theme-neon .ambient span:nth-child(1){ width:220px;height:220px; top:60px; left:-80px; background:#C6FF3A; opacity:.10; }
+  .theme-neon .ambient span:nth-child(2){ width:240px;height:240px; top:300px; right:-90px; background:#7B5CFF; opacity:.16; }
+  .theme-neon .ambient span:nth-child(3){ width:200px;height:200px; bottom:120px; left:-60px; background:#7B5CFF; opacity:.10; }
+  .theme-neon .chip.sel{ background:transparent; color:#C6FF3A; border:1.5px solid transparent;
+    background-image:linear-gradient(#0d0e12,#0d0e12),linear-gradient(90deg,#C6FF3A,#7B5CFF);
+    background-origin:border-box; background-clip:padding-box,border-box; box-shadow:0 0 16px rgba(198,255,58,.3); }
+  .theme-neon .chip .x svg{ stroke:#C6FF3A; }
+  .theme-neon .badge{ background:#C6FF3A; color:#0c0c0c; box-shadow:0 0 14px rgba(198,255,58,.5); }
+  .theme-neon .row{ }
+  .theme-neon .row:first-child{ border-color:rgba(198,255,58,.35); box-shadow:0 0 20px rgba(198,255,58,.12),var(--shadow); }
+
+  /* =================== THEME: COSMIC =================== */
+  .theme-cosmic{
+    --ink:#F4F4F6; --body:#9A9CA6; --meta:#65676F;
+    --accent:#D8C9A8; --accent-glow:rgba(216,201,168,.4);
+    --chrome:rgba(255,255,255,.04); --border:rgba(255,255,255,.06);
+    --plate:rgba(17,16,24,.42); --blur:18px; --blur-chrome:18px;
+    --shadow:0 12px 48px rgba(0,0,0,.45);
+    --chip-bg:rgba(255,255,255,.05); --pill-ink:#15140f;
+    --nav-bg:rgba(11,12,16,.5);
+    --fab-bg:linear-gradient(135deg,#E6E8EF,#C9CBD6); --fab-shadow:0 12px 30px rgba(0,0,0,.5); --fab-border:1px solid rgba(255,255,255,.4);
+  }
+  .theme-cosmic .canvas{ background:linear-gradient(180deg,#0B0C10,#111018 70%,#15121a); }
+  .theme-cosmic .ambient span:nth-child(1){ width:300px;height:300px; top:-60px; right:-100px; background:#2a2740; opacity:.5; }
+  .theme-cosmic .ambient span:nth-child(2){ width:260px;height:260px; bottom:0px; left:-90px; background:#1e1b2e; opacity:.6; }
+  .theme-cosmic .ambient span:nth-child(3){ width:1px;height:1px; top:140px; left:90px; box-shadow:
+      40px 30px 0 .5px rgba(255,255,255,.5), 120px 80px 0 .5px rgba(255,255,255,.35),
+      200px 20px 0 .5px rgba(255,255,255,.4), 60px 200px 0 .5px rgba(255,255,255,.3),
+      240px 260px 0 .5px rgba(255,255,255,.45), 30px 360px 0 .5px rgba(255,255,255,.3),
+      260px 420px 0 .5px rgba(255,255,255,.4), 160px 520px 0 .5px rgba(255,255,255,.3);
+      background:transparent; filter:none; }
+  .theme-cosmic .chip.sel{ background:rgba(216,201,168,.14); color:#D8C9A8; border:1px solid rgba(216,201,168,.4); }
+  .theme-cosmic .chip .x svg{ stroke:#D8C9A8; }
+  .theme-cosmic .badge{ background:rgba(230,232,239,.92); color:#15151a; }
+  .theme-cosmic .kcal{ color:#E6E8EF; }
+
+  /* =================== THEME: COMPANION =================== */
+  .theme-companion{
+    --ink:#F6F1F4; --body:#B7AEC0; --meta:#857C92;
+    --accent:#FF8A7A; --accent-glow:rgba(255,138,122,.45);
+    --chrome:rgba(255,255,255,.07); --border:rgba(255,255,255,.10);
+    --plate:rgba(26,23,38,.60); --blur:18px; --blur-chrome:20px;
+    --shadow:0 10px 36px rgba(20,10,30,.45);
+    --chip-bg:rgba(255,255,255,.08); --pill-ink:#2a0f0c;
+    --nav-bg:rgba(18,16,26,.55);
+    --fab-bg:linear-gradient(135deg,#FF8A7A,#FFC46B); --fab-shadow:0 10px 26px rgba(255,138,122,.45); --fab-border:none;
+  }
+  .theme-companion .canvas{ background:linear-gradient(165deg,#12101A,#1A1726); }
+  .theme-companion .ambient span:nth-child(1){ width:240px;height:240px; top:-30px; left:-60px; background:#FF8A7A; opacity:.22; }
+  .theme-companion .ambient span:nth-child(2){ width:260px;height:260px; top:160px; right:-90px; background:#8AA0FF; opacity:.22; }
+  .theme-companion .ambient span:nth-child(3){ width:240px;height:240px; top:420px; left:-70px; background:#FFC46B; opacity:.18; }
+  .theme-companion .ambient span:nth-child(4){ width:220px;height:220px; bottom:40px; right:-50px; background:#FF8A7A; opacity:.16; }
+  .theme-companion .chip.sel{ background:linear-gradient(135deg,#FF8A7A,#FFC46B); color:#2a0f0c; box-shadow:0 0 16px var(--accent-glow); }
+  .theme-companion .chip .x svg{ stroke:#2a0f0c; }
+  .theme-companion .badge{ background:linear-gradient(135deg,#FFC46B,#FF8A7A); color:#2a0f0c; }
+
+  /* =================== FLAT VARIANTS (no glass: no blur / glow / shadow / ambient) =================== */
+  .theme-aurora-flat, .theme-cosmic-flat{
+    --blur:0px; --blur-chrome:0px; --shadow:none; --border:transparent;
+    --accent-glow:transparent; --fab-shadow:none; --fab-border:none;
+  }
+  .theme-aurora-flat .ambient, .theme-cosmic-flat .ambient{ display:none; }
+  .theme-aurora-flat .featured .glow, .theme-cosmic-flat .featured .glow{ display:none; }
+  /* keep a faint flat divider so stacked solid cards still separate */
+  .theme-aurora-flat .row, .theme-cosmic-flat .row{ border:1px solid rgba(255,255,255,.04); }
+
+  /* Aurora · Flat */
+  .theme-aurora-flat{
+    --ink:#EAF1ED; --body:#9FB0A8; --meta:#6E7D76;
+    --accent:#5FD3A6;
+    --chrome:#161F1A; --plate:#161F1A;
+    --chip-bg:#1C2722; --pill-ink:#06140e;
+    --nav-bg:#0E1512;
+    --fab-bg:#5FD3A6;
+  }
+  .theme-aurora-flat .canvas{ background:#0C120F; }
+  .theme-aurora-flat .chip.sel{ background:#5FD3A6; color:#06140e; }
+  .theme-aurora-flat .chip .x svg{ stroke:#06140e; }
+  .theme-aurora-flat .badge{ background:#E8A487; color:#241008; }
+
+  /* Cosmic · Flat → Linear-style (near-black neutral, indigo accent, crisp hairlines, tight radii, Inter) */
+  .theme-cosmic-flat{
+    --ink:#F6F6F6; --body:#8F8F8F; --meta:#666666;
+    --accent:#5E6AD2; --accent-glow:transparent;
+    --chrome:#181818; --plate:#181818;
+    --border:rgba(255,255,255,.08);
+    --chip-bg:#202020; --pill-ink:#fff;
+    --nav-bg:#0E0E0E;
+    --fab-bg:linear-gradient(180deg,#6E79E0,#5E6AD2);
+    font-family:'Inter','Inter var',ui-sans-serif,system-ui,sans-serif;
+    letter-spacing:-0.006em;
+  }
+  /* flat neutral near-black, no gradient */
+  .theme-cosmic-flat .canvas{ background:#0C0C0C; }
+  /* crisp hairline borders + tighter Linear radii */
+  .theme-cosmic-flat .row, .theme-cosmic-flat .featured, .theme-cosmic-flat .search, .theme-cosmic-flat .loadmore{ border-radius:10px; }
+  .theme-cosmic-flat .row{ border:1px solid var(--border); }
+  .theme-cosmic-flat .icon-btn{ border-radius:9px; }
+  .theme-cosmic-flat .search .mic{ border-radius:7px; }
+  .theme-cosmic-flat .chip{ border-radius:7px; }
+  .theme-cosmic-flat .badge{ border-radius:6px; }
+  /* subtle dark chips — accent is reserved, not sprayed */
+  .theme-cosmic-flat .chip.sel{ background:#202020; color:#E8E8E8; border:1px solid rgba(255,255,255,.10); }
+  .theme-cosmic-flat .chip .x svg{ stroke:#8F8F8F; }
+  /* subtle dark tag/badge by default; Featured gets the one indigo pop */
+  .theme-cosmic-flat .badge{ background:rgba(12,12,12,.80); color:#CECECE; border:1px solid rgba(255,255,255,.10); }
+  .theme-cosmic-flat .featured .badge{ background:#5E6AD2; color:#fff; border:0; }
+  .theme-cosmic-flat .kcal{ color:#A5ABF5; }
+</style>
+</head>
+<body>
+  <div class="page-head">
+    <h1>Caloria · Dark Glassmorphism — Recipes screen, four directions</h1>
+    <p>Same frozen layout, IA, and component anatomy. Only color, surface, blur, glow, shadow & imagery change.</p>
+    <p class="note">375px frame · Heroicons-style glyphs · Unsplash food imagery · scrim-contract keeps row metadata legible on glass</p>
+  </div>
+  <div class="gallery" id="gallery"></div>
+
+<script>
+const I = {
+  search:'<path class="meta-s" stroke-width="1.6" stroke-linecap="round" d="m21 21-4.3-4.3M17 10.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z"/>',
+  mic:'<path class="body" stroke-width="1.6" stroke-linecap="round" d="M12 15.5a3 3 0 0 0 3-3v-6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm6-3a6 6 0 0 1-12 0M12 18.5V21"/>',
+  filter:'<path class="ink" stroke-width="1.6" stroke-linecap="round" d="M4 7h9m4 0h3M4 17h3m4 0h9M13 5v4M7 15v4m6-7h.01"/><circle cx="15" cy="7" r="2" class="ink" stroke-width="1.6"/><circle cx="9" cy="17" r="2" class="ink" stroke-width="1.6"/>',
+  star:'<path class="accent-f" d="M12 3.5l2.35 4.76 5.25.76-3.8 3.7.9 5.23L12 15.96l-4.7 2.47.9-5.23-3.8-3.7 5.25-.76L12 3.5Z"/>',
+  starW:'<path fill="#fff" d="M12 3.5l2.35 4.76 5.25.76-3.8 3.7.9 5.23L12 15.96l-4.7 2.47.9-5.23-3.8-3.7 5.25-.76L12 3.5Z"/>',
+  clock:'<path stroke-width="1.5" stroke-linecap="round" d="M12 7.5V12l3 1.8M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/>',
+  fire:'<path stroke-width="1.5" stroke-linejoin="round" d="M14.5 4.5A7.5 7.5 0 0 1 12 20a7.5 7.5 0 0 1-5.4-12.7A7.5 7.5 0 0 0 9 9.2 8.2 8.2 0 0 1 11.7 3a7.5 7.5 0 0 0 2.8 1.5Z"/>',
+  sort:'<path class="ink" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M3 10h8M3 15h8m6-9v12m0 0-3.5-3.5M17 18l3.5-3.5"/>',
+  reload:'<path class="body" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M19 9.5h-4V5.5m1 4A6.5 6.5 0 0 0 5.5 11M5 14.5h4v4m-1-4A6.5 6.5 0 0 0 18.5 13"/>',
+  x:'<path stroke-width="1.8" stroke-linecap="round" d="M6 18 18 6M6 6l12 12"/>',
+  home:'<path stroke-width="1.6" stroke-linejoin="round" d="M4 11l8-7 8 7M6 9.5V20h4v-5h4v5h4V9.5"/>',
+  book:'<path stroke-width="1.6" stroke-linejoin="round" d="M12 6.5A7 7 0 0 0 5 5v13a7 7 0 0 1 7 1.5A7 7 0 0 1 19 18V5a7 7 0 0 0-7 1.5Zm0 0v13"/>',
+  chart:'<path stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M4 13h3v7H4zM10.5 7h3v13h-3zM17 4h3v16h-3z"/>',
+  user:'<path stroke-width="1.6" stroke-linecap="round" d="M6.5 18.5A6.5 6.5 0 0 1 12 15.5a6.5 6.5 0 0 1 5.5 3M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-5-3a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>',
+  plus:'<path stroke-width="2.2" stroke-linecap="round" d="M12 5v14M5 12h14"/>'
+};
+function svg(p, size, cls){ return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" class="'+(cls||'')+'">'+p+'</svg>'; }
+
+const CHIPS = ['High Protein','Vegan','Vegetarian','Keto'];
+const FEATURED = { name:'Rainbow Buddha Bowl', img:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700&q=80&auto=format&fit=crop' };
+const RECIPES = [
+  { name:'Classic Greek Salad',       tag:'Vegan',     meta:'Lunch · Vegetarian',    rating:'4.5', rev:'78',  time:'10 min', kcal:'210 kcal', img:'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=240&q=80&auto=format&fit=crop' },
+  { name:'Hearty Lentil Soup',        tag:'Vegan',     meta:'Dinner · Vegan',        rating:'4.4', rev:'67',  time:'40 min', kcal:'270 kcal', img:'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=240&q=80&auto=format&fit=crop' },
+  { name:'Berry Overnight Oats',      tag:'Breakfast', meta:'Breakfast · Vegan',     rating:'4.7', rev:'89',  time:'5 min',  kcal:'290 kcal', img:'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=240&q=80&auto=format&fit=crop' },
+  { name:'Grilled Lemon Herb Salmon', tag:'Low Cal',   meta:'Dinner · High Protein', rating:'4.8', rev:'132', time:'25 min', kcal:'320 kcal', img:'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=240&q=80&auto=format&fit=crop' },
+  { name:'Chicken Veggie Stir Fry',   tag:'Low Cal',   meta:'Lunch · High Protein',  rating:'4.8', rev:'204', time:'30 min', kcal:'345 kcal', img:'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=240&q=80&auto=format&fit=crop' },
+  { name:'Avocado Egg Toast',         tag:'Keto',      meta:'Breakfast · Keto',      rating:'4.9', rev:'311', time:'15 min', kcal:'410 kcal', img:'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=240&q=80&auto=format&fit=crop' }
+];
+
+const THEMES = [
+  { id:'aurora',      name:'Aurora Wellness',          tag:'Glass · calm gradients · floating frost · single jade accent', sw:['#6FE3B5','#3FB59B','#E8A487','#0E1512'] },
+  { id:'aurora-flat', name:'Aurora Wellness · Flat',   tag:'Flat variant · solid stepped surfaces · no blur/glow/shadow',  sw:['#5FD3A6','#3FB59B','#161F1A','#0C120F'] },
+  { id:'neon',        name:'Neon Performance',         tag:'Glass · high contrast · neon edges · achievement glow',        sw:['#C6FF3A','#7B5CFF','#FFB020','#070708'] },
+  { id:'cosmic',      name:'Cosmic Minimalism',        tag:'Glass · sparse · barely-there glass · quiet luxury',           sw:['#D8C9A8','#E6E8EF','#2a2740','#0B0C10'] },
+  { id:'cosmic-flat', name:'Cosmic · Linear-style', tag:'Linear-inspired · neutral near-black · indigo accent · crisp hairlines · Inter', sw:['#5E6AD2','#828FFF','#181818','#0C0C0C'] },
+  { id:'companion',   name:'Digital Companion',        tag:'Glass · warm · soft pillowy glass · friendly personality',     sw:['#FF8A7A','#FFC46B','#8AA0FF','#1A1726'] }
+];
+
+const FB = "this.style.display='none'";
+
+function stat(icon, txt, cls){ return '<span class="'+(cls||'')+'">'+svg(icon,13,(cls?'':'body'))+txt+'</span>'; }
+
+function rowHTML(r){
+  return '<div class="row">'+
+    '<div class="thumb"><img src="'+r.img+'" onerror="'+FB+'"/><span class="tag badge">'+r.tag+'</span></div>'+
+    '<div class="rbody">'+
+      '<div class="rname">'+r.name+'</div>'+
+      '<div class="rmeta">'+r.meta+'</div>'+
+      '<div class="stats">'+
+        '<span>'+svg(I.star,13,'')+r.rating+' ('+r.rev+')</span>'+
+        stat(I.clock, r.time, '')+
+        '<span class="kcal">'+svg(I.fire,13,'accent-s')+r.kcal+'</span>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function screenHTML(){
+  const chips = CHIPS.map(c=>'<span class="chip sel">'+c+'<span class="x">'+svg(I.x,12,'')+'</span></span>').join('');
+  const rows = RECIPES.map(rowHTML).join('');
+  return ''+
+  '<div class="canvas"></div>'+
+  '<div class="ambient"><span></span><span></span><span></span><span></span></div>'+
+  '<div class="screen">'+
+    '<div class="status"><span>9:41</span><span class="dots"><b></b></span></div>'+
+    '<header><div><div class="eyebrow">Discover</div><h1 class="title">Recipes</h1></div>'+
+      '<button class="icon-btn">'+svg(I.filter,20,'')+'<span class="dot"></span></button></header>'+
+
+    '<section class="pad"><div class="search">'+svg(I.search,20,'')+
+      '<input placeholder="Search recipes…" readonly/>'+
+      '<span class="mic">'+svg(I.mic,16,'')+'</span></div></section>'+
+
+    '<section class="pad"><div class="chips">'+chips+'</div></section>'+
+
+    '<section class="pad"><div class="featured">'+
+      '<img src="'+FEATURED.img+'" onerror="'+FB+'"/><div class="scrim"></div><div class="glow"></div>'+
+      '<span class="badge">Featured</span>'+
+      '<div class="info"><div class="ttl">'+FEATURED.name+'</div>'+
+      '<div class="meta"><span>'+svg(I.starW,13,'')+'4.9</span>'+
+        '<span>'+svg(I.clock,13,'')+'<span style="stroke:#fff">20 min</span></span>'+
+        '<span>'+svg(I.fire,13,'')+'380 kcal</span></div></div>'+
+      '</div></section>'+
+
+    '<section><div class="sec-head"><div class="sec-title">24 Recipes Found</div>'+
+      '<button class="sort">Calories'+svg(I.sort,16,'')+'</button></div>'+
+      '<div class="pad rows">'+rows+'</div></section>'+
+
+    '<section class="pad" style="margin-top:14px"><button class="loadmore">'+svg(I.reload,18,'')+'Load More Recipes</button></section>'+
+    '<div style="height:120px"></div>'+
+  '</div>'+
+
+  '<div class="navwrap"><div class="nav">'+
+    '<div class="item">'+svg(I.home,24,'meta-s')+'Home</div>'+
+    '<div class="item active">'+svg(I.book,24,'ink')+'Recipes</div>'+
+    '<div class="item" style="visibility:hidden">.</div>'+
+    '<div class="item">'+svg(I.chart,24,'meta-s')+'Reports</div>'+
+    '<div class="item">'+svg(I.user,24,'meta-s')+'Profile</div>'+
+    '<div class="fab">'+svg(I.plus,26,'')+'</div>'+
+  '</div></div>';
+}
+
+const gallery = document.getElementById('gallery');
+THEMES.forEach(t=>{
+  const col = document.createElement('div');
+  col.className='col';
+  const sw = t.sw.map(c=>'<i style="background:'+c+'"></i>').join('');
+  col.innerHTML =
+    '<div class="label"><div class="name">'+t.name+'<span class="swatches">'+sw+'</span></div>'+
+    '<div class="tag">'+t.tag+'</div></div>'+
+    '<div class="phone theme-'+t.id+'">'+screenHTML()+'</div>';
+  gallery.appendChild(col);
+});
+// FAB plus icon needs white/dark stroke depending on theme — set per theme
+document.querySelectorAll('.theme-cosmic .fab svg path, .theme-aurora .fab svg path, .theme-companion .fab svg path, .theme-aurora-flat .fab svg path').forEach(p=>p.setAttribute('stroke','#0c120f'));
+document.querySelectorAll('.theme-neon .fab svg path').forEach(p=>p.setAttribute('stroke','#0c0c0c'));
+document.querySelectorAll('.theme-cosmic-flat .fab svg path').forEach(p=>p.setAttribute('stroke','#ffffff'));
+document.querySelectorAll('.sort svg path').forEach(p=>{}); // keep
+</script>
+</body>
+</html>
