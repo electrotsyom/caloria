@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import MobileFrame from './components/MobileFrame.jsx'
 import BottomNav from './components/BottomNav.jsx'
 import Recipes from './screens/Recipes.jsx'
+import RecipesLinear from './screens/RecipesLinear.jsx'
 import LogFood from './screens/LogFood.jsx'
 import FoodDetails from './screens/FoodDetails.jsx'
 import RecipeDetail from './screens/RecipeDetail.jsx'
@@ -34,6 +35,7 @@ export default function App() {
 
       {/* In-scope wireframes (built one at a time) */}
       <Route path="/recipes" element={<Recipes />} />
+      <Route path="/recipes-linear" element={<RecipesLinear />} />
       <Route path="/log" element={<LogFood />} />
 
       <Route path="/food-detail" element={<FoodDetails />} />
