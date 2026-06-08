@@ -6,6 +6,7 @@ import RecipesLinear from './screens/RecipesLinear.jsx'
 import LogFood from './screens/LogFood.jsx'
 import FoodDetails from './screens/FoodDetails.jsx'
 import RecipeDetail from './screens/RecipeDetail.jsx'
+import RecipeDetailsLinear from './screens/RecipeDetailsLinear.jsx'
 
 /*
  * Placeholder screen used until each real wireframe is built. Owns its own
@@ -40,6 +41,7 @@ export default function App() {
 
       <Route path="/food-detail" element={<FoodDetails />} />
       <Route path="/recipe-detail" element={<RecipeDetail />} />
+      <Route path="/recipe-details-linear" element={<RecipeDetailsLinear />} />
 
       {/* Nav destinations not yet wired to a wireframe */}
       <Route path="/home" element={<Placeholder title="Home" />} />

@@ -5,7 +5,7 @@ import Icon from '../primitives/Icon'
 /*
  * SearchInput — search field (DESIGN_INVENTORY 4.2).
  *
- * `h-12 rounded-xl border border-neutral-200 bg-white px-4`, leading magnifier
+ * `h-12 rounded-full border border-neutral-200 bg-white px-4`, leading magnifier
  * + input + trailing mic in a soft circle. Used on Home and Recipes. The
  * trailing control is configurable (defaults to the mic); pass
  * `trailingIcon={null}` to drop it.
@@ -24,7 +24,7 @@ export default function SearchInput({
   ...rest
 }) {
   return (
-    <div className={cn('flex h-12 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4', className)}>
+    <div className={cn('flex h-12 items-center gap-2 rounded-full border border-neutral-200 bg-white px-4', className)}>
       <Icon as={MagnifyingGlassIcon} size="inline" className="text-neutral-400" />
       <input
         value={value}

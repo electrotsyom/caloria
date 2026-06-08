@@ -38,6 +38,62 @@
 .theme-linear .hover\:text-neutral-600:hover { color: #a0a0a0; }    /* nav tab hover */
 .theme-linear .placeholder\:text-neutral-400::placeholder { color: #666666; }
 
+/* ---- Recipe Detail only: amber pill LABELS instead of amber fills ---- */
+/* Scoped to `.theme-linear-detail` (RecipeDetailsLinear) so recipes-linear keeps
+   its solid-amber fills. The selected Pill and active pills-variant TabItem are
+   the only `h-9 rounded-full bg-neutral-900 text-white` elements; swap the amber
+   fill for a faint amber tint and recolor the label (and its inherited icon)
+   amber. The numbered step badge (h-7) and Record button (rounded-xl) are
+   intentionally NOT matched, so they keep the solid accent. The 4-class selector
+   (0,4,0) outranks both `.theme-linear .bg-neutral-900` and the `.text-white`
+   utility, so it wins background AND color without !important. */
+.theme-linear-detail .h-9.rounded-full.bg-neutral-900 {
+  background-color: rgba(226, 163, 42, 0.14);
+  color: #e2a32a;
+}
+
+/* ---- Recipe Detail only: float the Record button over the content ---- */
+/* Scoped to `.theme-linear-detail` (RecipeDetailsLinear). Turns the solid pinned
+   footer bar into a floating Record button: transparent surface, no top border,
+   lifted off the bottom edge, with a shadow so it reads as floating. The button's
+   label, icon, and size are untouched — only the surrounding bar changes. The
+   base /recipe-detail route keeps the `recipe-record-footer` marker class but,
+   with no `.theme-linear-detail` ancestor, none of these rules apply. The
+   transparent bar is click-through (pointer-events: none) so taps fall to the
+   content behind it; the button itself re-enables pointer events. Screen's pb-24
+   already reserves clearance, so nothing hides behind the floating button. */
+.theme-linear-detail .recipe-record-footer {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  border-top: 0;
+  background-color: transparent;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  pointer-events: none;
+}
+.theme-linear-detail .recipe-record-footer button {
+  pointer-events: auto;
+  border-radius: 9999px;
+}
+
+/* ---- Recipe Detail only: hero controls + Record adopt the BottomNav surface ---- */
+/* The selected buttons — the hero Back / Share / Favorite controls (`bg-white/80`)
+   and the floating Record button — take the BottomNav glass treatment: the
+   bg-white/90 pill tone, a hairline border, a lifting shadow, backdrop blur, and
+   neutral-900 ink (instead of the overlay grey / solid amber fill). Scoped to
+   `.theme-linear-detail`, so the base /recipe-detail route is untouched. The
+   4-class footer-button selector and the source-ordered `.bg-white/80` rule both
+   outrank the base linear tones, so no !important is needed. */
+.theme-linear-detail .bg-white\/80,
+.theme-linear-detail .recipe-record-footer button {
+  background-color: rgba(24, 24, 24, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #c8c8c8;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.45), 0 4px 6px -4px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
 /* ---- Borders / dividers ---- */
 .theme-linear .border-neutral-200 { border-color: rgba(255, 255, 255, 0.08); }
 .theme-linear .border-neutral-100 { border-color: rgba(255, 255, 255, 0.06); }

@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import {
   AdjustmentsHorizontalIcon,
   BarsArrowDownIcon,
-  ArrowPathIcon,
   ClockIcon,
   FireIcon,
   XMarkIcon,
@@ -21,7 +20,6 @@ import {
   ListRow,
   Thumbnail,
   IconButton,
-  Button,
   Text,
   Icon,
 } from '../components'
@@ -173,13 +171,6 @@ export default function Recipes() {
               <RecipeRow key={recipe.name} recipe={recipe} onOpen={openDetail} />
             ))}
           </div>
-        </ScreenSection>
-
-        {/* Load more */}
-        <ScreenSection>
-          <Button variant="secondary" leadingIcon={ArrowPathIcon}>
-            Load More Recipes
-          </Button>
         </ScreenSection>
       </Screen>
     </MobileFrame>
