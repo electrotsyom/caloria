@@ -7,8 +7,8 @@
  * outranks the base Tailwind utility purely on specificity (0,2,0 > 0,1,0) —
  * no !important, no markup edits.
  *
- * Palette: neutral near-black surfaces + hairline borders + a single indigo
- * (#5E6AD2) accent mapped onto the wireframe's accent fills (Add FAB, filter
+ * Palette: neutral near-black surfaces + hairline borders + a single amber
+ * (#E2A32A) accent mapped onto the wireframe's accent fills (Add FAB, filter
  * dot — i.e. the original `bg-neutral-900` fills). `text-white` is intentionally
  * left untouched so it stays legible on the accent and on image scrims.
  */
@@ -20,18 +20,18 @@
 .theme-linear .bg-neutral-100 { background-color: #202020; }        /* filter chips, icon tiles, mic circle */
 .theme-linear .bg-neutral-200 { background-color: #242424; }        /* image placeholders, bar tracks */
 .theme-linear .bg-neutral-300 { background-color: #2e2e2e; }
-.theme-linear .bg-neutral-900 { background-color: #5e6ad2; }        /* ACCENT: FAB, filter dot, fills */
+.theme-linear .bg-neutral-900 { background-color: #e2a32a; }        /* ACCENT: FAB, filter dot, fills */
 .theme-linear .bg-white\/90 { background-color: rgba(24, 24, 24, 0.85); } /* floating nav pill */
 .theme-linear .bg-white\/80 { background-color: rgba(24, 24, 24, 0.80); } /* icon button over image */
 .theme-linear .bg-neutral-900\/40 { background-color: rgba(0, 0, 0, 0.45); } /* featured image scrim */
-.theme-linear .hover\:bg-neutral-700:hover { background-color: #4f58b8; }  /* FAB hover (indigo) */
+.theme-linear .hover\:bg-neutral-700:hover { background-color: #c08b24; }  /* FAB hover (amber) */
 
 /* The phone screen itself is MobileFrame's inner `w-[375px] bg-white`; pin it to
    the canvas tone. Placed AFTER `.bg-white` so it wins on equal specificity. */
 .theme-linear .w-\[375px\] { background-color: #0c0c0c; }
 
 /* ---- Text (white kept as-is for on-accent / on-image) ---- */
-.theme-linear .text-neutral-900 { color: #f6f6f6; }                 /* primary ink */
+.theme-linear .text-neutral-900 { color: #c8c8c8; }                 /* primary ink */
 .theme-linear .text-neutral-700 { color: #c8c8c8; }                 /* filled-chip label */
 .theme-linear .text-neutral-500 { color: #8f8f8f; }                 /* body */
 .theme-linear .text-neutral-400 { color: #666666; }                 /* meta / captions */

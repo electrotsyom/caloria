@@ -80,7 +80,7 @@ export default function BottomNav() {
       <NavLink
         to="/log"
         aria-label="Add"
-        className="pointer-events-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-neutral-900 text-white shadow-lg transition-colors hover:bg-neutral-700"
+        className="pointer-events-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white/90 text-neutral-900 shadow-lg backdrop-blur transition-colors hover:text-neutral-600"
       >
         <PlusIcon className="h-7 w-7" />
       </NavLink>
