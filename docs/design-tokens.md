@@ -1,5 +1,7 @@
 # Caloria — Design Tokens
 
+> **Superseded.** Historical wireframe token tables. The canonical, theme-aware token system (greyscale **and** Caloria dark values) now lives in [`design-system.md`](./design-system.md), which wins on any conflict. Kept for reference to the original greyscale mapping.
+
 > Quick-reference token tables for the wireframe system. All tokens map to **Tailwind CSS v3 defaults** — no `tailwind.config.js` extension is required. The **only** intentional arbitrary values are the two device safe-area insets. Companion files: [`design-system.md`](./design-system.md) (foundation), [`implementation-rules.md`](./implementation-rules.md) (rules).
 
 ## Color tokens (grayscale — 3-ink text ramp)

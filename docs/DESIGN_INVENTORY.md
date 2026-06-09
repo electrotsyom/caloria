@@ -1,8 +1,10 @@
 # Caloria — Tailwind Design Inventory
 
+> **Superseded for tokens.** This reverse-engineered inventory remains the reference for the **wireframe** screenshot recreation, but the canonical token system (now theme-aware, covering the Caloria dark theme) lives in [`design-system.md`](./design-system.md), which wins on any conflict.
+
 > Reverse-engineered from 4 source screenshots (rendered width **375px**).
 > Purpose: recreate the existing screens as **high-fidelity grayscale wireframes** in React + Tailwind CSS v3.
-> **This document is the source of truth** for all React + Tailwind implementation.
+> **This document is the source of truth** for the wireframe baseline implementation.
 > **Source of truth for visuals = screenshots.** No redesign, no new UX, no branding, no color decisions.
 > All color is intentionally dropped and replaced with a neutral gray scale (see *Grayscale Mapping*).
 >

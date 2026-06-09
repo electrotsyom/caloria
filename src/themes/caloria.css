@@ -1,0 +1,236 @@
+/*
+ * Caloria — "Cosmic · Linear" dark theme.
+ *
+ * This is the FINAL product visual direction. It recolors the shared greyscale
+ * wireframe components (real components, Heroicons, Tailwind sizes, font-sans)
+ * into dark surfaces + a single amber accent — COLOR / ELEVATION ONLY. No
+ * layout, size, structure, icon, or font changes.
+ *
+ * Every rule is scoped to `.theme-caloria`, so it outranks the base Tailwind
+ * utility purely on specificity (≥0,2,0 > 0,1,0) — no !important, no markup
+ * edits. The greyscale `/wireframe` prototype does not load this file, so it is
+ * unaffected by anything here.
+ *
+ * ── Token system ──────────────────────────────────────────────────────────
+ * All colors, the glass treatment, the elevation shadow, and the blur are
+ * defined ONCE as CSS custom properties on `.theme-caloria` (below) and
+ * referenced via var() everywhere else. To retune the theme, edit a token —
+ * not the 30+ rules that consume it. See docs/design-system.md for the token
+ * reference and the semantic meaning of each.
+ */
+
+.theme-caloria {
+  /* Surfaces (dark) — map of the wireframe's light surface ramp. */
+  --clr-backdrop: #050505;            /* desktop canvas around the phone (bg-slate-100) */
+  --clr-sunken: #0c0c0c;              /* phone screen + sunken fills (bg-neutral-50, w-[375px]) */
+  --clr-surface: #181818;             /* cards, search, buttons, badges (bg-white) */
+  --clr-surface-raised: #202020;      /* chips, icon tiles, mic circle (bg-neutral-100) */
+  --clr-surface-placeholder: #242424; /* image placeholders, bar tracks (bg-neutral-200) */
+  --clr-surface-strong: #2e2e2e;      /* strongest neutral fill (bg-neutral-300) */
+
+  /* Ink — the 3-step text ramp (primary / body / meta), kept from the wireframe. */
+  --clr-ink: #c8c8c8;                 /* primary text + filled-chip label (neutral-900 / neutral-700) */
+  --clr-body: #8f8f8f;                /* body copy (neutral-500) */
+  --clr-meta: #666666;                /* meta / captions / placeholders (neutral-400) */
+  --clr-ink-hover: #a0a0a0;           /* nav tab hover ink (neutral-600) */
+
+  /* Accent — the single brand color. */
+  --clr-accent: #e2a32a;              /* FAB, filter dot, fills (bg-neutral-900) + selected-label ink */
+  --clr-accent-hover: #c08b24;        /* accent hover (hover:bg-neutral-700) */
+
+  /* Lines — hairline borders/dividers as low-opacity white. */
+  --clr-border: rgba(255, 255, 255, 0.08);        /* hairline border (neutral-200) */
+  --clr-border-subtle: rgba(255, 255, 255, 0.06); /* fainter divider (neutral-100) */
+
+  /* Scrim + glass elevation. */
+  --clr-scrim: rgba(0, 0, 0, 0.45);   /* flat image scrim (neutral-900/40) */
+  --glass-bg: rgba(24, 24, 24, 0.85); /* translucent floating surface (white/80, white/90) */
+  --glass-blur: blur(8px);            /* backdrop blur behind glass elements */
+  --elevation-glass: 0 10px 15px -3px rgba(0, 0, 0, 0.45),
+    0 4px 6px -4px rgba(0, 0, 0, 0.45); /* lifting shadow for floating glass */
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Surfaces
+ * ──────────────────────────────────────────────────────────────────────── */
+.theme-caloria .bg-slate-100 { background-color: var(--clr-backdrop); }
+.theme-caloria .bg-neutral-50 { background-color: var(--clr-sunken); }
+.theme-caloria .bg-white { background-color: var(--clr-surface); }
+.theme-caloria .bg-neutral-100 { background-color: var(--clr-surface-raised); }
+.theme-caloria .bg-neutral-200 { background-color: var(--clr-surface-placeholder); }
+.theme-caloria .bg-neutral-300 { background-color: var(--clr-surface-strong); }
+.theme-caloria .bg-neutral-900 { background-color: var(--clr-accent); }
+.theme-caloria .bg-neutral-900\/40 { background-color: var(--clr-scrim); }
+.theme-caloria .bg-white\/90 { background-color: var(--glass-bg); }   /* floating nav pill */
+.theme-caloria .bg-white\/80 { background-color: var(--glass-bg); }   /* icon button over image */
+.theme-caloria .hover\:bg-neutral-700:hover { background-color: var(--clr-accent-hover); }
+
+/* The phone screen itself is MobileFrame's inner `w-[375px] bg-white`; pin it to
+   the sunken tone. Placed AFTER `.bg-white` so it wins on equal specificity. */
+.theme-caloria .w-\[375px\] { background-color: var(--clr-sunken); }
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Text (white kept as-is for on-accent / on-image legibility)
+ * ──────────────────────────────────────────────────────────────────────── */
+.theme-caloria .text-neutral-900 { color: var(--clr-ink); }   /* primary ink */
+.theme-caloria .text-neutral-700 { color: var(--clr-ink); }   /* filled-chip label (same ink) */
+.theme-caloria .text-neutral-500 { color: var(--clr-body); }  /* body */
+.theme-caloria .text-neutral-400 { color: var(--clr-meta); }  /* meta / captions */
+.theme-caloria .hover\:text-neutral-600:hover { color: var(--clr-ink-hover); }
+.theme-caloria .placeholder\:text-neutral-400::placeholder { color: var(--clr-meta); }
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Lines (borders / dividers)
+ * ──────────────────────────────────────────────────────────────────────── */
+.theme-caloria .border-neutral-200 { border-color: var(--clr-border); }
+.theme-caloria .border-neutral-100 { border-color: var(--clr-border-subtle); }
+.theme-caloria .divide-neutral-100 > :not([hidden]) ~ :not([hidden]) { border-color: var(--clr-border-subtle); }
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Glass — the signature floating-control treatment (consolidated)
+ *
+ * One appearance, four consumers: the hero Back / Share / Favorite controls
+ * (`bg-white/80`), the floating Record button on Recipe Detail, the Log Food
+ * sticky header back button, and the floating Record button on Food Details.
+ * Each selector keeps its own specificity, so all four still outrank the base
+ * linear surface/ink rules above. Defined here ONCE; previously this block was
+ * copy-pasted three times with raw values.
+ * ──────────────────────────────────────────────────────────────────────── */
+.theme-caloria-detail .bg-white\/80,
+.theme-caloria-detail .recipe-record-footer button,
+.theme-caloria-logfood .h-10.w-10.rounded-full.bg-neutral-100.text-neutral-900,
+.theme-caloria-food .h-12.rounded-xl.bg-neutral-900.text-white {
+  background-color: var(--glass-bg);
+  border: 1px solid var(--clr-border);
+  color: var(--clr-ink);
+  box-shadow: var(--elevation-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Floating footer — turn the solid pinned Record bar into a transparent,
+ * click-through layer so the glass button reads as floating over the content.
+ * One block for both detail screens (Recipe Detail's marker class + Food
+ * Details' generic footer); the buttons themselves get the pill shape below.
+ * ──────────────────────────────────────────────────────────────────────── */
+.theme-caloria-detail .recipe-record-footer,
+.theme-caloria-food .relative.border-t.bg-white {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  border-top: 0;
+  background-color: transparent;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  pointer-events: none;
+}
+.theme-caloria-detail .recipe-record-footer button,
+.theme-caloria-food .h-12.rounded-xl.bg-neutral-900.text-white {
+  pointer-events: auto;
+  border-radius: 9999px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Detail screens: selected pills differ ONLY by amber label color
+ *
+ * The selected Pill (meal + serving) and active pills-variant TabItem are the
+ * `h-9 rounded-full bg-neutral-900` elements. Instead of an amber fill, give
+ * each the same surface as its unselected siblings and recolor only the label
+ * (and its inherited icon): pills (`.px-4`) take the surface tone + hairline
+ * border with weight normalized; the tab (`.flex-1`) goes transparent over its
+ * track. The numbered step badge (h-7) and Record button (rounded-xl) don't
+ * carry `.px-4`/`.flex-1`, so they keep the solid accent.
+ * ──────────────────────────────────────────────────────────────────────── */
+.theme-caloria-detail .h-9.rounded-full.bg-neutral-900.px-4 {
+  background-color: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  color: var(--clr-accent);
+  font-weight: 400;
+}
+.theme-caloria-detail .h-9.rounded-full.bg-neutral-900.flex-1 {
+  background-color: transparent;
+  border: 1px solid var(--clr-border);
+  color: var(--clr-accent);
+}
+
+/* Detail screens: fully round the Serving & Quantity input (the Stepper's
+   `h-12 w-16 rounded-xl` field; `w-16` is unique to it) to match the round
+   stepper buttons. */
+.theme-caloria-detail .h-12.w-16.rounded-xl {
+  border-radius: 9999px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Detail screens: success Toast adopts the onImage Badge tones
+ *
+ * The success Toast is `rounded-full bg-neutral-900 ... text-white shadow-lg`,
+ * which the base theme would paint amber. Recolor it to the surface tone + ink
+ * (incl. the check icon) so the confirmation matches the hero badges.
+ * `shadow-lg` uniquely tags the Toast among the bg-neutral-900 elements.
+ * ──────────────────────────────────────────────────────────────────────── */
+.theme-caloria-detail .rounded-full.bg-neutral-900.shadow-lg {
+  background-color: var(--clr-surface);
+  color: var(--clr-ink);
+}
+.theme-caloria-detail .rounded-full.bg-neutral-900.shadow-lg .text-white {
+  color: var(--clr-ink);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Recipes: shorter bottom-nav pill (56px) + smaller tab icons
+ *
+ * The floating nav pill is the `bg-white/90 flex-1` element; the Add FAB is
+ * `bg-white/90` but `flex-shrink-0`, so `.flex-1` excludes it. Pin the pill to
+ * 56px, trim tab padding, shrink the FAB to match, and drop tab icons to 20px.
+ * ──────────────────────────────────────────────────────────────────────── */
+.theme-caloria nav .bg-white\/90.flex-1 { height: 56px; }
+.theme-caloria nav .bg-white\/90.flex-1 > a {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+.theme-caloria nav a[aria-label='Add'] {
+  height: 56px;
+  width: 56px;
+}
+.theme-caloria nav .bg-white\/90.flex-1 > a svg {
+  height: 20px;
+  width: 20px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Log Food: inline "+" add buttons adopt the outline-control treatment
+ *
+ * Every inline "+" add button (food rows + Suggested cards) is a `soft`
+ * IconButton (`h-8 w-8 rounded-full bg-neutral-100 text-neutral-900`). Give it
+ * the surface tone + hairline border + ink (matching the Stepper minus button)
+ * so it stays fully greyscale. The square quick-action tiles and the search mic
+ * lack the `.text-neutral-900` qualifier, so they're excluded.
+ * ──────────────────────────────────────────────────────────────────────── */
+.theme-caloria-logfood .h-8.w-8.rounded-full.bg-neutral-100.text-neutral-900 {
+  background-color: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  color: var(--clr-ink);
+}
+
+/* Log Food: pin the header back button to the top while the body scrolls. The
+   header is transparent + click-through; only the back button (its own glass
+   pill, styled by the consolidated glass rule above) re-enables pointer events. */
+.theme-caloria-logfood header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+.theme-caloria-logfood header button { pointer-events: auto; }
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Food Details: drop the footer Cancel button so Record fills the bar
+ *
+ * The footer Cancel is the secondary Button (`h-12 rounded-xl border bg-white
+ * text-neutral-500`); the primary Record is `bg-neutral-900 text-white`, so it
+ * isn't matched. Hiding Cancel leaves Record, which carries `flex-1` and
+ * expands to fill the bar.
+ * ──────────────────────────────────────────────────────────────────────── */
+.theme-caloria-food .h-12.rounded-xl.border.bg-white.text-neutral-500 {
+  display: none;
+}

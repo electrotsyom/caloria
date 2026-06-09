@@ -1,6 +1,8 @@
 # Caloria — Implementation Rules
 
-> Rules every future wireframe must follow to stay consistent and faithful to the screenshots. Read alongside [`design-system.md`](./design-system.md) (foundation) and [`design-tokens.md`](./design-tokens.md) (tokens). The ultimate source of truth is the screenshots and [`DESIGN_INVENTORY.md`](./DESIGN_INVENTORY.md).
+> **Scope note (reconciled).** These rules govern the **greyscale wireframe baseline** (`/wireframe/*`) — the faithful screenshot recreation. The shipped **Caloria** product (`/caloria/*`) layers a dark "Cosmic · Linear" theme (near-black surfaces + a single amber accent + hairline borders + glass elevation) on top of these same components via `src/themes/caloria.css`. That theme is **color/elevation only** and is expressed entirely through the tokens in [`design-system.md`](./design-system.md) — it does not change structure, size, type, or icons. So when a rule below says "grayscale only / no brand color," read it as: *the components and the wireframe stay greyscale; the Caloria accent and dark surfaces are introduced solely by the token theme, never hard-coded in a component or screen.* On any conflict, [`design-system.md`](./design-system.md) is canonical.
+
+> Rules every future wireframe must follow to stay consistent and faithful to the screenshots. Read alongside [`design-system.md`](./design-system.md) (foundation, canonical tokens). The ultimate source of truth for the wireframe is the screenshots and [`DESIGN_INVENTORY.md`](./DESIGN_INVENTORY.md).
 
 ## Goal
 
