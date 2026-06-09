@@ -6,6 +6,7 @@ import RecipesLinear from './screens/RecipesLinear.jsx'
 import LogFood from './screens/LogFood.jsx'
 import LogFoodLinear from './screens/LogFoodLinear.jsx'
 import FoodDetails from './screens/FoodDetails.jsx'
+import FoodDetailsLinear from './screens/FoodDetailsLinear.jsx'
 import RecipeDetail from './screens/RecipeDetail.jsx'
 import RecipeDetailsLinear from './screens/RecipeDetailsLinear.jsx'
 
@@ -42,6 +43,7 @@ export default function App() {
       <Route path="/log-food-linear" element={<LogFoodLinear />} />
 
       <Route path="/food-detail" element={<FoodDetails />} />
+      <Route path="/food-detail-linear" element={<FoodDetailsLinear />} />
       <Route path="/recipe-detail" element={<RecipeDetail />} />
       <Route path="/recipe-details-linear" element={<RecipeDetailsLinear />} />
 

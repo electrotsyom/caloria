@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { cn } from '../lib/cn'
 import {
   ChevronLeftIcon,
   ChevronDownIcon,
@@ -84,7 +85,7 @@ function HeroMeta({ icon, children }) {
   )
 }
 
-export default function FoodDetails() {
+export default function FoodDetails({ stickyControls = false }) {
   const navigate = useNavigate()
   const [qty, setQty] = useState(100)
   const [showToast, setShowToast] = useState(false)
@@ -117,20 +118,45 @@ export default function FoodDetails() {
     </div>
   )
 
+  // Hero overlay controls — back (left) + favorite (right). With `stickyControls`
+  // (the Linear variant) they live in a sticky zero-height layer so they pin to
+  // the top while the body scrolls (mirrors RecipeDetail); pointer-events-auto
+  // keeps them tappable through the click-through wrapper. Default: a static
+  // overlay on the hero (the base /food-detail wireframe, unchanged).
+  const heroControls = (
+    <>
+      <IconButton icon={ChevronLeftIcon} label="Back" variant="overlay" className={stickyControls ? 'pointer-events-auto' : undefined} onClick={() => navigate(-1)} />
+      <IconButton icon={HeartIcon} label="Favorite" variant="overlay" className={stickyControls ? 'pointer-events-auto' : undefined} />
+    </>
+  )
+
   return (
     <MobileFrame bottomNav={stickyFooter}>
       {/* No safeTop — the hero bleeds under the status bar; overlay controls
           clear it via their own top inset. */}
       <Screen>
+        {/* Sticky controls layer (Linear variant): a zero-height sticky overlay so
+            the controls pin to the top of the scroll area. !mt-0 on the hero below
+            cancels Screen's space-y gap under this zero-height layer. */}
+        {stickyControls && (
+          <div className="pointer-events-none sticky top-0 z-30 h-0">
+            <div className="flex items-center justify-between px-4 pt-[59px]">
+              {heroControls}
+            </div>
+          </div>
+        )}
+
         {/* Full-bleed hero with overlay controls + badges + title */}
-        <div className="relative h-72 w-full overflow-hidden bg-neutral-200">
+        <div className={cn('relative h-72 w-full overflow-hidden bg-neutral-200', stickyControls && '!mt-0')}>
           <div className="absolute inset-0 bg-neutral-900/40" />
 
-          {/* Overlay controls: back (left), heart (right) */}
-          <div className="absolute inset-x-0 top-0 flex items-center justify-between px-4 pt-[59px]">
-            <IconButton icon={ChevronLeftIcon} label="Back" variant="overlay" onClick={() => navigate(-1)} />
-            <IconButton icon={HeartIcon} label="Favorite" variant="overlay" />
-          </div>
+          {/* Overlay controls: back (left), heart (right) — static on the hero
+              unless they've been lifted into the sticky layer above. */}
+          {!stickyControls && (
+            <div className="absolute inset-x-0 top-0 flex items-center justify-between px-4 pt-[59px]">
+              {heroControls}
+            </div>
+          )}
 
           {/* Bottom overlay: badges, title, meta */}
           <div className="absolute inset-x-0 bottom-0 space-y-2 p-4">

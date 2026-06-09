@@ -104,6 +104,23 @@
   -webkit-backdrop-filter: blur(8px);
 }
 
+/* ---- Detail screens (linear): success Toast adopts the onImage Badge tones ---- */
+/* The Record / Record Food success Toast pill is `rounded-full bg-neutral-900
+   ... text-white shadow-lg`, so the base linear theme paints it amber. Recolor it
+   to the onImage Badge surface instead — the bg-white tone (#181818) with #c8c8c8
+   ink (incl. the check icon) — so the confirmation matches the hero badges.
+   `shadow-lg` uniquely tags the Toast (the selected pills, the numbered step
+   badge, and the Record button carry no shadow-lg), so those keep their own
+   treatment. `.theme-linear-detail` covers BOTH RecipeDetailsLinear and
+   FoodDetailsLinear; the base /recipe-detail and /food-detail routes are untouched. */
+.theme-linear-detail .rounded-full.bg-neutral-900.shadow-lg {
+  background-color: #181818;
+  color: #c8c8c8;
+}
+.theme-linear-detail .rounded-full.bg-neutral-900.shadow-lg .text-white {
+  color: #c8c8c8;
+}
+
 /* ---- Recipes (linear only): shorter bottom nav pill (56px) ---- */
 /* The floating nav pill is the `bg-white/90 flex-1` element; the Add FAB is also
    `bg-white/90` but `flex-shrink-0`, so the `.flex-1` qualifier excludes it. Pin
@@ -178,6 +195,57 @@
 }
 .theme-linear-logfood header button {
   pointer-events: auto;
+}
+
+/* ---- Food Details only: drop the footer Cancel button ---- */
+/* Scoped to `.theme-linear-food` (FoodDetailsLinear). The sticky footer's Cancel
+   is the secondary Button (`h-12 rounded-xl border bg-white text-neutral-500`) —
+   the primary Record button is `bg-neutral-900 text-white` and the serving input
+   is `text-neutral-900`, so neither matches. Hiding Cancel leaves only Record,
+   which already carries `flex-1` and so expands to fill the bar. The base
+   /food-detail route keeps both buttons. */
+.theme-linear-food .h-12.rounded-xl.border.bg-white.text-neutral-500 {
+  display: none;
+}
+
+/* ---- Food Details only: Record adopts the recipe-details-linear Record button ---- */
+/* Food Details uses the same MobileFrame footer slot as Recipe Detail but without
+   the `recipe-record-footer` marker, so it can't pick up those rules directly.
+   Replicate them here: turn the solid pinned footer (`relative border-t bg-white`)
+   into a transparent, click-through floating bar, and give the primary Record
+   button (`h-12 rounded-xl bg-neutral-900 text-white`) the recipe-details-linear
+   glass pill — rounded-full, the bg-white/90 tone, a hairline border, a lifting
+   shadow, backdrop blur, and neutral ink instead of the solid amber fill. Mirrors
+   `.theme-linear-detail .recipe-record-footer` + the shared glass rule. Screen's
+   pb-24 reserves clearance, so nothing hides behind the floating button. */
+.theme-linear-food .relative.border-t.bg-white {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  border-top: 0;
+  background-color: transparent;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  pointer-events: none;
+}
+.theme-linear-food .h-12.rounded-xl.bg-neutral-900.text-white {
+  pointer-events: auto;
+  border-radius: 9999px;
+  background-color: rgba(24, 24, 24, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #c8c8c8;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.45), 0 4px 6px -4px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---- Detail screens (linear): fully round the Serving & Quantity input ---- */
+/* The servings/quantity input is the Stepper's `h-12 w-16 rounded-xl` field;
+   `w-16` is unique to it (the −/+ buttons are w-9/w-8), so the selector won't
+   touch them. Pill it to match the round stepper buttons. `.theme-linear-detail`
+   covers both RecipeDetailsLinear and FoodDetailsLinear; the base /recipe-detail
+   and /food-detail routes keep the rounded-xl field. */
+.theme-linear-detail .h-12.w-16.rounded-xl {
+  border-radius: 9999px;
 }
 
 /* ---- Borders / dividers ---- */
