@@ -127,6 +127,59 @@
   width: 20px;
 }
 
+/* ---- Log Food only: inline "+" add buttons adopt the Stepper minus style ---- */
+/* Scoped to `.theme-linear-logfood` (LogFoodLinear). Every inline "+" add button
+   (food rows + Suggested cards) takes the same treatment as the Serving &
+   Quantity minus button on recipe-details-linear — the Stepper's `outline`
+   IconButton (`border border-neutral-200 text-neutral-900 bg-white`), which the
+   linear theme renders as a #181818 surface, a hairline border, and a #c8c8c8
+   glyph. The targets are the soft IconButtons, whose `soft` variant adds
+   `text-neutral-900` to the `h-8 w-8 rounded-full bg-neutral-100` button — the
+   quick-action tiles (square `rounded-xl` Thumbnails) and the search mic
+   (`bg-neutral-100` with no button text-color class) both lack that qualifier,
+   so they're excluded. The 6-class selector outranks `.theme-linear
+   .bg-neutral-100` and the inherited `.theme-linear .text-neutral-900` glyph
+   color. No !important, no markup edits. */
+.theme-linear-logfood .h-8.w-8.rounded-full.bg-neutral-100.text-neutral-900 {
+  background-color: #181818;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #c8c8c8;
+}
+
+/* ---- Log Food only: header back button adopts the recipe-details-linear back style ---- */
+/* The ScreenHeader back button is a soft header IconButton
+   (`h-10 w-10 rounded-full bg-neutral-100 text-neutral-900`) and the only one on
+   the screen. Give it the SAME glass treatment the hero Back control gets on
+   recipe-details-linear (the `.theme-linear-detail .bg-white/80` rule): the
+   bg-white/90 pill tone, a hairline border, a lifting shadow, backdrop blur, and
+   neutral ink. The 6-class selector outranks `.theme-linear .bg-neutral-100` and
+   the inherited `.theme-linear .text-neutral-900`. No !important, no markup edits. */
+.theme-linear-logfood .h-10.w-10.rounded-full.bg-neutral-100.text-neutral-900 {
+  background-color: rgba(24, 24, 24, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #c8c8c8;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.45), 0 4px 6px -4px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---- Log Food only: pin the header back button to the top while the body scrolls ---- */
+/* The ScreenHeader is the first child of the Screen column, which spans the full
+   scroll height, so making it `sticky top:0` keeps the back button floating at
+   the top across the whole scroll (the same mechanism recipe-details-linear uses
+   for its hero controls). The header is transparent and click-through so content
+   scrolls cleanly beneath it; only the back button (which carries its own glass
+   pill) re-enables pointer events. */
+.theme-linear-logfood header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+.theme-linear-logfood header button {
+  pointer-events: auto;
+}
+
 /* ---- Borders / dividers ---- */
 .theme-linear .border-neutral-200 { border-color: rgba(255, 255, 255, 0.08); }
 .theme-linear .border-neutral-100 { border-color: rgba(255, 255, 255, 0.06); }

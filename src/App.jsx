@@ -4,6 +4,7 @@ import BottomNav from './components/BottomNav.jsx'
 import Recipes from './screens/Recipes.jsx'
 import RecipesLinear from './screens/RecipesLinear.jsx'
 import LogFood from './screens/LogFood.jsx'
+import LogFoodLinear from './screens/LogFoodLinear.jsx'
 import FoodDetails from './screens/FoodDetails.jsx'
 import RecipeDetail from './screens/RecipeDetail.jsx'
 import RecipeDetailsLinear from './screens/RecipeDetailsLinear.jsx'
@@ -38,6 +39,7 @@ export default function App() {
       <Route path="/recipes" element={<Recipes />} />
       <Route path="/recipes-linear" element={<RecipesLinear />} />
       <Route path="/log" element={<LogFood />} />
+      <Route path="/log-food-linear" element={<LogFoodLinear />} />
 
       <Route path="/food-detail" element={<FoodDetails />} />
       <Route path="/recipe-detail" element={<RecipeDetail />} />
