@@ -1,5 +1,6 @@
 import '../themes/linear.css'
 import RecipeDetail from './RecipeDetail.jsx'
+import { recipeHeroImage } from '../lib/foodImages'
 
 /*
  * Recipe Detail — Cosmic · Linear-style visual direction.
@@ -15,7 +16,7 @@ import RecipeDetail from './RecipeDetail.jsx'
 export default function RecipeDetailsLinear() {
   return (
     <div className="theme-linear theme-linear-detail">
-      <RecipeDetail />
+      <RecipeDetail heroImage={recipeHeroImage} />
     </div>
   )
 }

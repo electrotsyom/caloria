@@ -55,13 +55,13 @@ function Stat({ icon, children }) {
   )
 }
 
-function RecipeRow({ recipe, onOpen }) {
+function RecipeRow({ recipe, image, onOpen }) {
   return (
     <ListRow
       onClick={onOpen}
       className="h-24 cursor-pointer overflow-hidden"
       contentClassName="flex h-full flex-col justify-between py-0.5"
-      leading={<Thumbnail size="lg" className="!h-24 !w-24 !rounded-r-none" />}
+      leading={<Thumbnail size="lg" src={image} alt={recipe.name} className="!h-24 !w-24 !rounded-r-none" />}
       title={
         <>
           <Text variant="cardTitle" className="block truncate">
@@ -86,7 +86,7 @@ function RecipeRow({ recipe, onOpen }) {
   )
 }
 
-export default function Recipes() {
+export default function Recipes({ images } = {}) {
   const navigate = useNavigate()
   const openDetail = () => navigate('/recipe-detail')
 
@@ -142,6 +142,7 @@ export default function Recipes() {
           <button type="button" onClick={openDetail} className="block w-full text-left">
             <MediaCard
               variant="featured"
+              image={images?.featured}
               title="Rainbow Buddha Bowl"
               badge={<Badge variant="onImage">Featured</Badge>}
               meta={
@@ -168,7 +169,7 @@ export default function Recipes() {
         <ScreenSection title="24 Recipes Found" action={sortAction}>
           <div className="space-y-3">
             {sortedRecipes.map((recipe) => (
-              <RecipeRow key={recipe.name} recipe={recipe} onOpen={openDetail} />
+              <RecipeRow key={recipe.name} recipe={recipe} image={images?.rows?.[recipe.name]} onOpen={openDetail} />
             ))}
           </div>
         </ScreenSection>

@@ -1,5 +1,6 @@
 import '../themes/linear.css'
 import LogFood from './LogFood.jsx'
+import { logFoodImages } from '../lib/foodImages'
 
 /*
  * Log Food — Cosmic · Linear-style visual direction.
@@ -17,7 +18,7 @@ import LogFood from './LogFood.jsx'
 export default function LogFoodLinear() {
   return (
     <div className="theme-linear theme-linear-logfood">
-      <LogFood />
+      <LogFood images={logFoodImages} />
     </div>
   )
 }

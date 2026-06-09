@@ -90,7 +90,7 @@ function KcalValue({ children }) {
   )
 }
 
-export default function LogFood() {
+export default function LogFood({ images } = {}) {
   const navigate = useNavigate()
   const openDetail = () => navigate('/food-detail')
 
@@ -138,7 +138,7 @@ export default function LogFood() {
                 key={food.name}
                 onClick={openDetail}
                 className="h-16 cursor-pointer overflow-hidden"
-                leading={<Thumbnail size="md" className="!h-16 !w-16 !rounded-r-none" />}
+                leading={<Thumbnail size="md" src={images?.rows?.[food.name]} alt={food.name} className="!h-16 !w-16 !rounded-r-none" />}
                 title={food.name}
                 subtitle={food.detail}
                 trailing={<KcalValue>{food.kcal}</KcalValue>}
@@ -156,7 +156,7 @@ export default function LogFood() {
                 key={food.name}
                 onClick={openDetail}
                 className="h-16 cursor-pointer overflow-hidden"
-                leading={<Thumbnail size="md" className="!h-16 !w-16 !rounded-r-none" />}
+                leading={<Thumbnail size="md" src={images?.rows?.[food.name]} alt={food.name} className="!h-16 !w-16 !rounded-r-none" />}
                 title={food.name}
                 subtitle={food.detail}
                 trailing={<KcalValue>{food.kcal}</KcalValue>}
@@ -174,7 +174,7 @@ export default function LogFood() {
                 key={food.name}
                 onClick={openDetail}
                 className="h-16 cursor-pointer overflow-hidden"
-                leading={<Thumbnail size="md" className="!h-16 !w-16 !rounded-r-none" />}
+                leading={<Thumbnail size="md" src={images?.rows?.[food.name]} alt={food.name} className="!h-16 !w-16 !rounded-r-none" />}
                 title={food.name}
                 subtitle={food.detail}
                 trailing={<KcalValue>{food.kcal}</KcalValue>}
@@ -196,6 +196,7 @@ export default function LogFood() {
                 className="cursor-pointer text-left"
               >
                 <MediaCard
+                  image={images?.suggested?.[item.name]}
                   title={item.name}
                   meta={item.kcal}
                   action={<IconButton icon={PlusIcon} label={`Add ${item.name}`} size="inline" />}

@@ -85,7 +85,7 @@ function HeroMeta({ icon, children }) {
   )
 }
 
-export default function FoodDetails({ stickyControls = false }) {
+export default function FoodDetails({ stickyControls = false, heroImage } = {}) {
   const navigate = useNavigate()
   const [qty, setQty] = useState(100)
   const [showToast, setShowToast] = useState(false)
@@ -148,6 +148,7 @@ export default function FoodDetails({ stickyControls = false }) {
 
         {/* Full-bleed hero with overlay controls + badges + title */}
         <div className={cn('relative h-72 w-full overflow-hidden bg-neutral-200', stickyControls && '!mt-0')}>
+          {heroImage && <img src={heroImage} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />}
           <div className="absolute inset-0 bg-neutral-900/40" />
 
           {/* Overlay controls: back (left), heart (right) — static on the hero

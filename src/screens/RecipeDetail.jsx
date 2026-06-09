@@ -139,7 +139,7 @@ function Amount({ amount, per }) {
   )
 }
 
-export default function RecipeDetail() {
+export default function RecipeDetail({ heroImage } = {}) {
   const navigate = useNavigate()
   const [servings, setServings] = useState(1)
   const [activeTab, setActiveTab] = useState('nutrition')
@@ -193,6 +193,7 @@ export default function RecipeDetail() {
             sticky layer above. !mt-0 cancels Screen's space-y gap under the
             zero-height sticky layer so the hero still starts at the very top. */}
         <div className="relative h-72 w-full overflow-hidden bg-neutral-200 !mt-0">
+          {heroImage && <img src={heroImage} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />}
           <div className="absolute inset-0 bg-neutral-900/40" />
 
           {/* Bottom overlay: badges, title, rating / time / difficulty */}

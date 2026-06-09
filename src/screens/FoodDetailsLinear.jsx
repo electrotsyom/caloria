@@ -1,5 +1,6 @@
 import '../themes/linear.css'
 import FoodDetails from './FoodDetails.jsx'
+import { foodHeroImage } from '../lib/foodImages'
 
 /*
  * Food Details — Cosmic · Linear-style visual direction.
@@ -23,7 +24,7 @@ import FoodDetails from './FoodDetails.jsx'
 export default function FoodDetailsLinear() {
   return (
     <div className="theme-linear theme-linear-detail theme-linear-food">
-      <FoodDetails stickyControls />
+      <FoodDetails stickyControls heroImage={foodHeroImage} />
     </div>
   )
 }
