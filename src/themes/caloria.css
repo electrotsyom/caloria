@@ -138,8 +138,8 @@
  * each the same surface as its unselected siblings and recolor only the label
  * (and its inherited icon): pills (`.px-4`) take the surface tone + hairline
  * border with weight normalized; the tab (`.flex-1`) goes transparent over its
- * track. The numbered step badge (h-7) and Record button (rounded-xl) don't
- * carry `.px-4`/`.flex-1`, so they keep the solid accent.
+ * track. The Record button (rounded-xl) carries neither `.px-4`/`.flex-1`, so it
+ * keeps the solid accent; the numbered step badge (h-7) is greyed below.
  * ──────────────────────────────────────────────────────────────────────── */
 .theme-caloria-detail .h-9.rounded-full.bg-neutral-900.px-4 {
   background-color: var(--clr-surface);
@@ -151,6 +151,16 @@
   background-color: transparent;
   border: 1px solid var(--clr-border);
   color: var(--clr-accent);
+}
+
+/* Instructions: grey out the numbered step badges. The `h-7 w-7` accent circle
+   (unique among bg-neutral-900 elements) sheds the amber fill for a raised grey
+   surface + hairline border, and its `.text-white` number is recolored to ink —
+   so the steps recede instead of competing with the amber Record action. */
+.theme-caloria-detail .h-7.w-7.rounded-full.bg-neutral-900 {
+  background-color: var(--clr-surface-strong);
+  border: 1px solid var(--clr-border);
+  color: var(--clr-ink);
 }
 
 /* Detail screens: fully round the Serving & Quantity input (the Stepper's

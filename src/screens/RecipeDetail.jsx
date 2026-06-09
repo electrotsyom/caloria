@@ -139,7 +139,7 @@ function Amount({ amount, per }) {
   )
 }
 
-export default function RecipeDetail({ heroImage } = {}) {
+export default function RecipeDetail({ heroImage, ingredientImages } = {}) {
   const navigate = useNavigate()
   const [servings, setServings] = useState(1)
   const [activeTab, setActiveTab] = useState('nutrition')
@@ -298,17 +298,20 @@ export default function RecipeDetail({ heroImage } = {}) {
           {activeTab === 'ingredients' && (
             <Card className="mt-2">
               <DetailList>
-                {INGREDIENTS.map((item, i) => (
+                {INGREDIENTS.map((item, i) => {
+                  const image = ingredientImages?.[item.name]
+                  return (
                   <ListRow
                     key={item.name}
                     card={false}
                     className={cn(i === 0 && 'pt-0', i === INGREDIENTS.length - 1 && 'pb-0')}
-                    leading={<Thumbnail size="sm" tone="icon" />}
+                    leading={image ? <Thumbnail size="sm" tone="image" src={image} alt="" /> : <Thumbnail size="sm" tone="icon" />}
                     title={item.name}
                     subtitle={item.note}
                     trailing={<Amount amount={item.amount} per={item.per} />}
                   />
-                ))}
+                  )
+                })}
               </DetailList>
             </Card>
           )}

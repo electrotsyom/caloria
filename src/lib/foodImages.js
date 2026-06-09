@@ -48,6 +48,12 @@ const P = {
   cheese: 'photo-1683314573422-649a3c6ad784', // cheese on a wooden board
   quinoaSalad: 'photo-1650539688297-88df97068f2e', // grain bowl on a wooden table
   smoothieBowl: 'photo-1590301157284-ab2f8707bdc1', // berries in a warm wooden bowl
+  lemon: 'photo-1551445639-26f1a3b51671', // single lemon on dark wood, soft moody light
+  dill: 'photo-1758055660094-c0c6557f9a1f', // bundles of fresh green dill
+  oliveOil: 'photo-1474979266404-7eaacbcd87c5', // glass oil cruet, soft warm light
+  garlic: 'photo-1625229466998-42ee9c597290', // garlic in a warm wooden bowl, dark ground
+  blackPepper: 'photo-1600728255690-edd070021d02', // peppercorns on a dark surface
+  seaSalt: 'photo-1763974463967-647601c65961', // coarse salt in spoons on dark
 }
 
 /* Recipes (recipes-linear) — featured hero + per-recipe row thumbnails. */
@@ -65,6 +71,22 @@ export const recipeImages = {
 
 /* Recipe Detail (recipe-details-linear) hero — the Grilled Lemon Herb Salmon. */
 export const recipeHeroImage = u(P.salmon, 1200)
+
+/*
+ * Recipe Detail ingredient-row thumbnails — one photo per ingredient, keyed by
+ * the ingredient name. Salmon reuses the hero photo so the ingredient ties back
+ * to the dish above it; the rest are single-subject, dark/warm, soft-lit stills
+ * screened against the same art direction as the food photos.
+ */
+export const recipeIngredientImages = {
+  'Salmon Fillet': u(P.salmon, 200),
+  Lemon: u(P.lemon, 200),
+  'Fresh Dill': u(P.dill, 200),
+  'Olive Oil': u(P.oliveOil, 200),
+  'Garlic Cloves': u(P.garlic, 200),
+  'Black Pepper': u(P.blackPepper, 200),
+  'Sea Salt': u(P.seaSalt, 200),
+}
 
 /* Food Details (food-detail-linear) hero — the Grilled Chicken Breast. */
 export const foodHeroImage = u(P.chicken, 1200)

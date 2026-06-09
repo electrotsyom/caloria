@@ -1,6 +1,6 @@
 import '../themes/caloria.css'
 import RecipeDetail from './RecipeDetail.jsx'
-import { recipeHeroImage } from '../lib/foodImages'
+import { recipeHeroImage, recipeIngredientImages } from '../lib/foodImages'
 
 /*
  * Recipe Detail — Cosmic · Linear-style visual direction.
@@ -16,7 +16,7 @@ import { recipeHeroImage } from '../lib/foodImages'
 export default function RecipeDetailsLinear() {
   return (
     <div className="theme-caloria theme-caloria-detail">
-      <RecipeDetail heroImage={recipeHeroImage} />
+      <RecipeDetail heroImage={recipeHeroImage} ingredientImages={recipeIngredientImages} />
     </div>
   )
 }
