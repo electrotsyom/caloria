@@ -38,17 +38,27 @@
 .theme-linear .hover\:text-neutral-600:hover { color: #a0a0a0; }    /* nav tab hover */
 .theme-linear .placeholder\:text-neutral-400::placeholder { color: #666666; }
 
-/* ---- Recipe Detail only: amber pill LABELS instead of amber fills ---- */
+/* ---- Recipe Detail only: selected items differ ONLY by amber label color ---- */
 /* Scoped to `.theme-linear-detail` (RecipeDetailsLinear) so recipes-linear keeps
-   its solid-amber fills. The selected Pill and active pills-variant TabItem are
-   the only `h-9 rounded-full bg-neutral-900 text-white` elements; swap the amber
-   fill for a faint amber tint and recolor the label (and its inherited icon)
-   amber. The numbered step badge (h-7) and Record button (rounded-xl) are
-   intentionally NOT matched, so they keep the solid accent. The 4-class selector
-   (0,4,0) outranks both `.theme-linear .bg-neutral-900` and the `.text-white`
-   utility, so it wins background AND color without !important. */
-.theme-linear-detail .h-9.rounded-full.bg-neutral-900 {
-  background-color: rgba(226, 163, 42, 0.14);
+   its solid-amber fills. The selected Pill (meal + serving) and active
+   pills-variant TabItem are the `h-9 rounded-full bg-neutral-900` elements.
+   Instead of an amber fill/tint, give each the SAME surface as its unselected
+   siblings and recolor only the label (and its inherited icon):
+     · pills (`.px-4`) → the unselected bg-white tone + hairline border, with the
+       font-weight normalized so just the amber text differs.
+     · the tab (`.flex-1`) → transparent over its `bg-neutral-100` track.
+   The numbered step badge (h-7) and Record button (rounded-xl) don't carry both
+   `.px-4`/`.flex-1`, so they keep the solid accent. Each 5-class selector outranks
+   `.theme-linear .bg-neutral-900`, `.text-white`, and `.font-medium`. */
+.theme-linear-detail .h-9.rounded-full.bg-neutral-900.px-4 {
+  background-color: #181818;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e2a32a;
+  font-weight: 400;
+}
+.theme-linear-detail .h-9.rounded-full.bg-neutral-900.flex-1 {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: #e2a32a;
 }
 
@@ -92,6 +102,29 @@
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.45), 0 4px 6px -4px rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---- Recipes (linear only): shorter bottom nav pill (56px) ---- */
+/* The floating nav pill is the `bg-white/90 flex-1` element; the Add FAB is also
+   `bg-white/90` but `flex-shrink-0`, so the `.flex-1` qualifier excludes it. Pin
+   the pill to 56px (down from the content-driven ~66px) and trim the tab vertical
+   padding so the icon + label still center without overflowing. */
+.theme-linear nav .bg-white\/90.flex-1 {
+  height: 56px;
+}
+.theme-linear nav .bg-white\/90.flex-1 > a {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+/* Shrink the Add FAB to match the pill height (56px, down from 64px). */
+.theme-linear nav a[aria-label='Add'] {
+  height: 56px;
+  width: 56px;
+}
+/* Shrink the four tab icons inside the pill to 20x20 (down from 24x24). */
+.theme-linear nav .bg-white\/90.flex-1 > a svg {
+  height: 20px;
+  width: 20px;
 }
 
 /* ---- Borders / dividers ---- */

@@ -175,18 +175,25 @@ export default function RecipeDetail() {
       {/* No safeTop — the hero bleeds under the status bar; overlay controls
           clear it via their own top inset. */}
       <Screen>
-        {/* Full-bleed hero with overlay controls + badges + title + rating */}
-        <div className="relative h-72 w-full overflow-hidden bg-neutral-200">
-          <div className="absolute inset-0 bg-neutral-900/40" />
-
-          {/* Overlay controls: back (left), share + heart (right) */}
-          <div className="absolute inset-x-0 top-0 flex items-center justify-between px-4 pt-[59px]">
-            <IconButton icon={ChevronLeftIcon} label="Back" variant="overlay" onClick={() => navigate(-1)} />
-            <div className="flex items-center gap-2">
+        {/* Sticky hero controls — pinned to the top of the scroll area so they stay
+            visible (floating over the content) while the hero and body scroll
+            beneath. A zero-height sticky layer overlays the hero without taking
+            layout space; the row is click-through so only the buttons capture taps. */}
+        <div className="pointer-events-none sticky top-0 z-30 h-0">
+          <div className="flex items-center justify-between px-4 pt-[59px]">
+            <IconButton icon={ChevronLeftIcon} label="Back" variant="overlay" className="pointer-events-auto" onClick={() => navigate(-1)} />
+            <div className="pointer-events-auto flex items-center gap-2">
               <IconButton icon={ShareIcon} label="Share recipe" variant="overlay" />
               <IconButton icon={HeartIcon} label="Favorite recipe" variant="overlay" />
             </div>
           </div>
+        </div>
+
+        {/* Full-bleed hero with badges + title + rating; the controls are the
+            sticky layer above. !mt-0 cancels Screen's space-y gap under the
+            zero-height sticky layer so the hero still starts at the very top. */}
+        <div className="relative h-72 w-full overflow-hidden bg-neutral-200 !mt-0">
+          <div className="absolute inset-0 bg-neutral-900/40" />
 
           {/* Bottom overlay: badges, title, rating / time / difficulty */}
           <div className="absolute inset-x-0 bottom-0 space-y-2 p-4">
