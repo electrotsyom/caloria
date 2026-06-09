@@ -16,7 +16,7 @@ import { recipeImages } from '../lib/foodImages'
 export default function RecipesLinear() {
   return (
     <div className="theme-linear">
-      <Recipes images={recipeImages} />
+      <Recipes images={recipeImages} basePath="/caloria" />
     </div>
   )
 }

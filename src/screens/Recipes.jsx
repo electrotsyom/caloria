@@ -86,9 +86,9 @@ function RecipeRow({ recipe, image, onOpen }) {
   )
 }
 
-export default function Recipes({ images } = {}) {
+export default function Recipes({ images, basePath = '' } = {}) {
   const navigate = useNavigate()
-  const openDetail = () => navigate('/recipe-detail')
+  const openDetail = () => navigate(`${basePath}/recipe-detail`)
 
   const filterAction = (
     <div className="relative">
@@ -110,7 +110,7 @@ export default function Recipes({ images } = {}) {
   )
 
   return (
-    <MobileFrame bottomNav={<BottomNav />}>
+    <MobileFrame bottomNav={<BottomNav basePath={basePath} />}>
       <Screen safeTop>
         <ScreenHeader title="Recipes" action={filterAction} />
 

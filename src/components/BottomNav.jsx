@@ -16,19 +16,23 @@ import {
 /*
  * Tabs use Heroicons v2 exclusively (outline by default, solid when active).
  * Colors follow the canonical grayscale ramp: active neutral-900, inactive neutral-400.
+ *
+ * `Recipes` is the only in-scope tab, so it is scoped to the active prototype via
+ * `basePath` (see below). Home / Reports / Profile stay global placeholders.
  */
 const TABS = [
   { to: '/home', label: 'Home', Icon: HomeIcon, ActiveIcon: HomeIconSolid },
-  { to: '/recipes', label: 'Recipes', Icon: BookOpenIcon, ActiveIcon: BookOpenIconSolid },
+  { to: '/recipes', label: 'Recipes', Icon: BookOpenIcon, ActiveIcon: BookOpenIconSolid, scoped: true },
   { to: '/reports', label: 'Reports', Icon: ChartBarIcon, ActiveIcon: ChartBarIconSolid },
   { to: '/profile', label: 'Profile', Icon: UserCircleIcon, ActiveIcon: UserCircleIconSolid },
 ]
 
 /* A standard tab inside the floating pill. */
-function NavTab({ to, label, Icon, ActiveIcon }) {
+function NavTab({ to, label, Icon, ActiveIcon, scoped, basePath }) {
+  const href = scoped ? `${basePath}${to}` : to
   return (
     <NavLink
-      to={to}
+      to={href}
       className={({ isActive }) =>
         `flex flex-1 flex-col items-center justify-center gap-1 py-2.5 text-xs font-medium transition-colors ${
           isActive ? 'text-neutral-900' : 'text-neutral-400 hover:text-neutral-600'
@@ -64,21 +68,24 @@ function NavTab({ to, label, Icon, ActiveIcon }) {
  * `relative`) and uses `pointer-events-none` so it never blocks taps on the
  * content behind the gaps; the pill and button re-enable pointer events. Screens
  * reserve clearance via the Screen component's `pb-24`.
+ *
+ * `basePath` scopes the in-prototype destinations (Recipes tab + Add FAB) so the
+ * nav keeps the user inside their prototype — `/caloria/*` or `/wireframe/*`.
  */
-export default function BottomNav() {
+export default function BottomNav({ basePath = '' }) {
   return (
     <nav className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-center gap-3 px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
       {/* Floating pill with the four primary tabs */}
       <div className="pointer-events-auto flex flex-1 items-stretch rounded-full border border-neutral-200 bg-white/90 px-2 shadow-lg backdrop-blur">
-        <NavTab {...TABS[0]} />
-        <NavTab {...TABS[1]} />
-        <NavTab {...TABS[2]} />
-        <NavTab {...TABS[3]} />
+        <NavTab {...TABS[0]} basePath={basePath} />
+        <NavTab {...TABS[1]} basePath={basePath} />
+        <NavTab {...TABS[2]} basePath={basePath} />
+        <NavTab {...TABS[3]} basePath={basePath} />
       </div>
 
       {/* Separate, detached Add button on the right */}
       <NavLink
-        to="/log"
+        to={`${basePath}/log`}
         aria-label="Add"
         className="pointer-events-auto flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white/90 text-neutral-900 shadow-lg backdrop-blur transition-colors hover:text-neutral-600"
       >

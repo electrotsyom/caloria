@@ -30,24 +30,54 @@ function Placeholder({ title }) {
   )
 }
 
+/*
+ * Two self-contained prototypes, each under its own path prefix so its screens
+ * navigate only within that prototype:
+ *
+ *   /caloria/*     — the Linear screens prototype (art-directed, themed)
+ *   /wireframe/*  — the greyscale wireframe prototype (the base screens)
+ *
+ * Each prototype exposes the same four screens (recipes · log · food-detail ·
+ * recipe-detail). The greyscale base screens take `basePath` so their forward
+ * navigation (Recipes → recipe-detail, Log Food → food-detail, BottomNav Add →
+ * log) stays inside the prototype; the Linear wrappers pass `basePath="/caloria"`.
+ * Detail screens use `navigate(-1)` for back, so they need no prefix wiring.
+ */
 export default function App() {
   return (
     <Routes>
-      {/* Default landing */}
-      <Route path="/" element={<Navigate to="/recipes" replace />} />
+      {/* Default landing → the Linear prototype's hub */}
+      <Route path="/" element={<Navigate to="/caloria/recipes" replace />} />
 
-      {/* In-scope wireframes (built one at a time) */}
-      <Route path="/recipes" element={<Recipes />} />
-      <Route path="/recipes-linear" element={<RecipesLinear />} />
-      <Route path="/log" element={<LogFood />} />
-      <Route path="/log-food-linear" element={<LogFoodLinear />} />
+      {/* ── Linear screens prototype ────────────────────────────────── */}
+      <Route path="/caloria">
+        <Route index element={<Navigate to="recipes" replace />} />
+        <Route path="recipes" element={<RecipesLinear />} />
+        <Route path="log" element={<LogFoodLinear />} />
+        <Route path="food-detail" element={<FoodDetailsLinear />} />
+        <Route path="recipe-detail" element={<RecipeDetailsLinear />} />
+      </Route>
 
-      <Route path="/food-detail" element={<FoodDetails />} />
-      <Route path="/food-detail-linear" element={<FoodDetailsLinear />} />
-      <Route path="/recipe-detail" element={<RecipeDetail />} />
-      <Route path="/recipe-details-linear" element={<RecipeDetailsLinear />} />
+      {/* ── Greyscale wireframe prototype ───────────────────────────── */}
+      <Route path="/wireframe">
+        <Route index element={<Navigate to="recipes" replace />} />
+        <Route path="recipes" element={<Recipes basePath="/wireframe" />} />
+        <Route path="log" element={<LogFood basePath="/wireframe" />} />
+        <Route path="food-detail" element={<FoodDetails />} />
+        <Route path="recipe-detail" element={<RecipeDetail />} />
+      </Route>
 
-      {/* Nav destinations not yet wired to a wireframe */}
+      {/* Back-compat: old flat paths redirect into their new prototype */}
+      <Route path="/recipes" element={<Navigate to="/wireframe/recipes" replace />} />
+      <Route path="/log" element={<Navigate to="/wireframe/log" replace />} />
+      <Route path="/food-detail" element={<Navigate to="/wireframe/food-detail" replace />} />
+      <Route path="/recipe-detail" element={<Navigate to="/wireframe/recipe-detail" replace />} />
+      <Route path="/recipes-linear" element={<Navigate to="/caloria/recipes" replace />} />
+      <Route path="/log-food-linear" element={<Navigate to="/caloria/log" replace />} />
+      <Route path="/food-detail-linear" element={<Navigate to="/caloria/food-detail" replace />} />
+      <Route path="/recipe-details-linear" element={<Navigate to="/caloria/recipe-detail" replace />} />
+
+      {/* Nav destinations not yet wired to a wireframe (shared placeholders) */}
       <Route path="/home" element={<Placeholder title="Home" />} />
       <Route path="/reports" element={<Placeholder title="Reports" />} />
       <Route path="/profile" element={<Placeholder title="Profile" />} />

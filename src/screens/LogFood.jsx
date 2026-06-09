@@ -90,9 +90,9 @@ function KcalValue({ children }) {
   )
 }
 
-export default function LogFood({ images } = {}) {
+export default function LogFood({ images, basePath = '' } = {}) {
   const navigate = useNavigate()
-  const openDetail = () => navigate('/food-detail')
+  const openDetail = () => navigate(`${basePath}/food-detail`)
 
   const addAction = (
     <IconButton icon={PlusIcon} label="Add food" size="inline" />

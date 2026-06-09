@@ -18,7 +18,7 @@ import { logFoodImages } from '../lib/foodImages'
 export default function LogFoodLinear() {
   return (
     <div className="theme-linear theme-linear-logfood">
-      <LogFood images={logFoodImages} />
+      <LogFood images={logFoodImages} basePath="/caloria" />
     </div>
   )
 }
